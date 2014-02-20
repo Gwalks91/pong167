@@ -5,6 +5,7 @@
 #include "Globals.h"
 #include "Paddle.h"
 #include "Player.h"
+#include "Ball.h"
 
 sf::Sprite MakeSprite(sf::Texture& texture)
 {
@@ -18,8 +19,10 @@ int main()
 {
     sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(1000, 550), "SFML works!");
 
-	Player p1(sf::Vector2f(10.0f, 0.0f), sf::Keyboard::W, sf::Keyboard::S);
-	Player p2(sf::Vector2f(970.0f, 0.0f), sf::Keyboard::I, sf::Keyboard::K);
+	Player p1(1, sf::Vector2f(10.0f, 0.0f), sf::Keyboard::W, sf::Keyboard::S);
+	Player p2(2, sf::Vector2f(970.0f, 0.0f), sf::Keyboard::I, sf::Keyboard::K);
+
+	Ball b(0.05f, LoadTexture("PongBall.png"));
 
     while (window->isOpen())
     {
@@ -51,10 +54,12 @@ int main()
 
 		p1.Update();
 		p2.Update();
+		b.Update();
 
         window->clear();
 		p1.Draw(window);
 		p2.Draw(window);
+		b.Draw(window);
         window->display();
     }
 

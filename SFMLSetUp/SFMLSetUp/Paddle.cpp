@@ -13,8 +13,11 @@ Paddle::Paddle(sf::Vector2f v, float speed, sf::Texture t)
 //Moce the paddle based off of the input enum
 void Paddle::MovePaddle(Input i)
 {
-	position += velocity * (float)i;
-	pSprite.setPosition(position);
+	if(CheckBounds(i))
+	{
+		position += velocity * (float)i;
+		pSprite.setPosition(position);
+	}
 }
 
 //Going to have to check the collider 
@@ -23,9 +26,16 @@ void Paddle::Update()
 
 }
 
-
 void Paddle::Draw(sf::RenderWindow* w)
 {
 	w->draw(pSprite);
+}
 
+bool Paddle::CheckBounds(Input i)
+{
+	if((position.y <= 0 && i == -1) || (position.y >= SCREEN_HEIGHT - pSprite.getGlobalBounds().height && i == 1))
+	{
+		return false;
+	}
+	return true;
 }

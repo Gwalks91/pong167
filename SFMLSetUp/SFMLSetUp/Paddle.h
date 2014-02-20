@@ -15,6 +15,7 @@ public :
 	void Update();
 	void Draw(sf::RenderWindow* w);
 private:
+	bool CheckBounds(Input i);
 	sf::Texture pTexture;
 	sf::Sprite pSprite;
 	sf::Vector2f position;

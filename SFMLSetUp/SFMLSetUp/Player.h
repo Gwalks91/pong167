@@ -11,11 +11,13 @@ class Player
 public:
 	sf::Keyboard::Key moveUp;
 	sf::Keyboard::Key moveDown;
-	Player(sf::Vector2f paddlePos, sf::Keyboard::Key up, sf::Keyboard::Key down);
+	Player(int pID, sf::Vector2f paddlePos, sf::Keyboard::Key up, sf::Keyboard::Key down);
+	int GetID();
 	void HandleInput(sf::Event e);
 	void Update();
 	void Draw(sf::RenderWindow* w);
 private:
+	int playerID;
 	int score;
 	sf::Font font;
 	sf::Text text;

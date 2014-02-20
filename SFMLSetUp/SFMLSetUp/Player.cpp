@@ -2,8 +2,10 @@
 #include "Player.h"
 #include <string>
 
-Player::Player(sf::Vector2f paddlePos, sf::Keyboard::Key up, sf::Keyboard::Key down)
+Player::Player(int pID, sf::Vector2f paddlePos, sf::Keyboard::Key up, sf::Keyboard::Key down)
 {
+	playerID = pID;
+
 	p = new Paddle(paddlePos, 10.0f, LoadTexture("paddle.png"));
 	moveUp = up;
 	moveDown = down;
@@ -16,8 +18,15 @@ Player::Player(sf::Vector2f paddlePos, sf::Keyboard::Key up, sf::Keyboard::Key d
 	text.setCharacterSize(12);
 }
 
+int Player::GetID()
+{
+	return playerID;
+}
+
 void Player::HandleInput(sf::Event e)
 {
+	//Add dead Reckoning  
+	//Send a message to the server to update the main game 
 	if (sf::Keyboard::isKeyPressed(moveUp))
 	{
 		p->MovePaddle(Input::MoveUp);
