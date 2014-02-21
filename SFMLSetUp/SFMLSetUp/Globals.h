@@ -10,6 +10,7 @@ extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 
 sf::Texture LoadTexture(std::string s);
+void NormalizeVector(sf::Vector2f &v);
 
 enum Input 
 {

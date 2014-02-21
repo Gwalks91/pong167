@@ -4,6 +4,8 @@
 
 Ball::Ball(float speed, sf::Texture t)
 {
+	std::srand(std::time(NULL));
+
 	ballSpeed = speed;
 	velocity = MakeRandomVector() * speed;
 	position = sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
@@ -14,16 +16,24 @@ Ball::Ball(float speed, sf::Texture t)
 
 void Ball::ChangeBallDirection()
 {
+	bool goingRight = false;
+	if(velocity.x > 0)
+	{
+		goingRight = true;
+	}
 	velocity = MakeRandomVector() * ballSpeed;
+	if(goingRight)
+		velocity *= (-1.0f);
+}
+
+sf::FloatRect Ball::GetSpriteBoundingBox()
+{
+	return pSprite.getGlobalBounds();
 }
 
 void Ball::Update()
 {
-	if(CheckCollision())
-	{
-		ChangeBallDirection();
-	}
-	std::cout << velocity.x << " : " << velocity.y << std::endl;
+	CheckBounds();
 	position += velocity;
 	pSprite.setPosition(position);
 }
@@ -40,12 +50,19 @@ bool Ball::CheckCollision()
 	return false;
 }
 
-//Function that makes a new Vector2f in a random direction
+void Ball::CheckBounds()
+{
+	if((velocity.y > 0 && position.y > SCREEN_HEIGHT - pSprite.getGlobalBounds().height) 
+		|| (velocity.y < 0 && position.y < 0))
+	{
+		velocity.y *= -1.0f;
+	}
+}
+
+//Function that makes a new Vector2f in a random direction that is normalized
 sf::Vector2f Ball::MakeRandomVector()
 {
-	sf::Vector2f newDirection(std::rand() % 5, std::rand() % 5);
-	float length = std::sqrt(std::pow(newDirection.x, 2) * std::pow(newDirection.y, 2));
-	newDirection.x = newDirection.x/length;
-	newDirection.y = newDirection.y/length;
+	sf::Vector2f newDirection(std::rand(), std::rand());
+	NormalizeVector(newDirection);
 	return newDirection;
 }

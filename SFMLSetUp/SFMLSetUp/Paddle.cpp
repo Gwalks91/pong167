@@ -20,6 +20,11 @@ void Paddle::MovePaddle(Input i)
 	}
 }
 
+sf::FloatRect Paddle::GetSpriteBoundingBox()
+{
+	return pSprite.getGlobalBounds();
+}
+
 //Going to have to check the collider 
 void Paddle::Update()
 {

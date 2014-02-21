@@ -12,6 +12,7 @@ public :
 	//Paddle();
 	Paddle(sf::Vector2f v, float speed, sf::Texture t);
 	void MovePaddle(Input i);
+	sf::FloatRect GetSpriteBoundingBox();
 	void Update();
 	void Draw(sf::RenderWindow* w);
 private:

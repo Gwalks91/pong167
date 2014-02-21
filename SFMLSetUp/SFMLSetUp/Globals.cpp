@@ -13,3 +13,10 @@ sf::Texture LoadTexture(std::string s)
 	}
 	return t;
 }
+
+void NormalizeVector(sf::Vector2f &v)
+{
+	float length = std::sqrt(std::pow(v.x, 2) * std::pow(v.y, 2));
+	v.x = v.x/length;
+	v.y = v.y/length;
+}

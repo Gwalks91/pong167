@@ -23,6 +23,11 @@ int Player::GetID()
 	return playerID;
 }
 
+Paddle* Player::GetPaddle()
+{
+	return p;
+}
+
 void Player::HandleInput(sf::Event e)
 {
 	//Add dead Reckoning  
@@ -44,7 +49,7 @@ int Player::GetScore()
 
 void Player::Update()
 {
-	text.setString("Score: " + GetScore());
+	//text.setString("Score: " + GetScore());
 }
 
 void Player::Draw(sf::RenderWindow* w)

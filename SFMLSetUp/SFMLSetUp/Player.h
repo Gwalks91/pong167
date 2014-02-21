@@ -13,6 +13,7 @@ public:
 	sf::Keyboard::Key moveDown;
 	Player(int pID, sf::Vector2f paddlePos, sf::Keyboard::Key up, sf::Keyboard::Key down);
 	int GetID();
+	Paddle* GetPaddle();
 	void HandleInput(sf::Event e);
 	void Update();
 	void Draw(sf::RenderWindow* w);
