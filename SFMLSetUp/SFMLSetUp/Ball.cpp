@@ -5,25 +5,19 @@
 Ball::Ball(float speed, sf::Texture t)
 {
 	std::srand(std::time(NULL));
-
 	ballSpeed = speed;
-	velocity = MakeRandomVector() * speed;
+	velocity = sf::Vector2f(ballSpeed, ballSpeed);
 	position = sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 	pTexture = t;
 	pSprite.setTexture(pTexture);
 	pSprite.setPosition(position);
+
+	goingRight = true;
 }
 
 void Ball::ChangeBallDirection()
 {
-	bool goingRight = false;
-	if(velocity.x > 0)
-	{
-		goingRight = true;
-	}
-	velocity = MakeRandomVector() * ballSpeed;
-	if(goingRight)
-		velocity *= (-1.0f);
+	velocity.x *= (-1.0f);
 }
 
 sf::FloatRect Ball::GetSpriteBoundingBox()
@@ -31,11 +25,20 @@ sf::FloatRect Ball::GetSpriteBoundingBox()
 	return pSprite.getGlobalBounds();
 }
 
+bool Ball::GetDirection()
+{
+	return goingRight;
+}
+
 void Ball::Update()
 {
 	CheckBounds();
+	if(velocity.x >= 0)
+		goingRight = true;
+	else
+		goingRight = false;
 	position += velocity;
-	pSprite.setPosition(position);
+	pSprite.setPosition(position.x, position.y);
 }
 
 void Ball::Draw(sf::RenderWindow* w)

@@ -13,6 +13,7 @@ public:
 	Ball(float speed, sf::Texture t);
 	sf::FloatRect GetSpriteBoundingBox(); 
 	void ChangeBallDirection();
+	bool GetDirection();
 	void Update();
 	void Draw(sf::RenderWindow* w);
 private:
@@ -20,6 +21,7 @@ private:
 	void CheckBounds();
 	bool CheckCollision();
 	float ballSpeed;
+	bool goingRight;
 	sf::Texture pTexture;
 	sf::Sprite pSprite;
 	sf::Vector2f position;

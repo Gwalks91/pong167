@@ -13,7 +13,7 @@ public :
 	Paddle(sf::Vector2f v, float speed, sf::Texture t);
 	void MovePaddle(Input i);
 	sf::FloatRect GetSpriteBoundingBox();
-	void Update();
+	void Update(sf::Time deltaTime);
 	void Draw(sf::RenderWindow* w);
 private:
 	bool CheckBounds(Input i);

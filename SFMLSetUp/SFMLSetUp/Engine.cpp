@@ -7,13 +7,17 @@ Engine::Engine()
 	window = new sf::RenderWindow(sf::VideoMode(1000, 550), "SFML works!");
 
 	player1 = new Player(1, sf::Vector2f(10.0f, 0.0f), sf::Keyboard::W, sf::Keyboard::S);
-	player2 = new Player(2, sf::Vector2f(970.0f, 0.0f), sf::Keyboard::I, sf::Keyboard::K);
+	player2 = new Player(2, sf::Vector2f(970.0f, 0.0f), sf::Keyboard::Up, sf::Keyboard::Down);
 
-	ball = new Ball(300.0f, LoadTexture("PongBall.png"));
+	ball = new Ball(0.1f, LoadTexture("PongBall.png"));
+
+	wasHit = false;
 }
 
 void Engine::Update()
 {	
+	sf::Time elapsedTime = clock.getElapsedTime();
+
 	HandleInput();
 
 	CheckCollision();
@@ -62,8 +66,12 @@ void Engine::HandleInput()
 
 void Engine::CheckCollision()
 {
-	if(ball->GetSpriteBoundingBox().intersects(player1->GetPaddle()->GetSpriteBoundingBox()) ||
-		ball->GetSpriteBoundingBox().intersects(player2->GetPaddle()->GetSpriteBoundingBox()))
+	if(ball->GetSpriteBoundingBox().intersects(player1->GetPaddle()->GetSpriteBoundingBox()) && !ball->GetDirection())
+	{
+		ball->ChangeBallDirection();
+	}
+		
+	if(ball->GetSpriteBoundingBox().intersects(player2->GetPaddle()->GetSpriteBoundingBox()) && ball->GetDirection())
 	{
 		ball->ChangeBallDirection();
 	}

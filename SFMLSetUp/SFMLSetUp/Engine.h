@@ -18,8 +18,10 @@ public:
 	Player* player2;
 	Ball* ball;
 private:
+	bool wasHit;
 	void HandleInput();
 	void CheckCollision();
+	sf::Clock clock;
 
 };
 

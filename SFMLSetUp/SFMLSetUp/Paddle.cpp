@@ -26,7 +26,7 @@ sf::FloatRect Paddle::GetSpriteBoundingBox()
 }
 
 //Going to have to check the collider 
-void Paddle::Update()
+void Paddle::Update(sf::Time deltaTime)
 {
 
 }
