@@ -37,18 +37,28 @@ void Player::handleInput()
 	//Send a message to the server to update the main game 
 	if (sf::Keyboard::isKeyPressed(moveUp))
 	{
-		p->MovePaddle(Input::MoveUp);
 		up = true;
 	}
 	if(sf::Keyboard::isKeyPressed(moveDown))
 	{
-		p->MovePaddle(Input::MoveDown);
 		down = true;
 	}
 
 	if(!up && !down)
 	{
 		p->MovePaddle(Input::NoInput);
+	}
+	else if(up && down)
+	{
+		p->MovePaddle(Input::NoInput);
+	}
+	else if(down)
+	{
+		p->MovePaddle(Input::MoveDown);
+	}
+	else if(up)
+	{
+		p->MovePaddle(Input::MoveUp);
 	}
 }
 

@@ -1,6 +1,7 @@
 #include "Paddle.h"
 
 const float Paddle::accel = .01;
+const float Paddle::max = .5f;
 
 Paddle::Paddle(sf::Vector2f v, float speed, sf::Texture t)
 {
@@ -22,7 +23,7 @@ void Paddle::MovePaddle(Input i)
 		buttonHeld = true;
 		
 		//Inc. the speed by the acceleration rate.
-		if(abs(currentSpeed) < .5f)
+		if(abs(currentSpeed) < max)
 		{
 			currentSpeed += accel * (float)i;
 			//Set the velocity.

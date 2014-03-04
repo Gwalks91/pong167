@@ -27,6 +27,7 @@ private:
 	float currentSpeed;
 	
 	static const float accel;
+	static const float max;
 };
 
 #endif

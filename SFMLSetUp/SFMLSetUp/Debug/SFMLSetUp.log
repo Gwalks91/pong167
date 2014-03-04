@@ -1,1 +1,6 @@
-﻿
+﻿  Player.cpp
+c:\users\handerson\documents\pong167\sfmlsetup\sfmlsetup\player.cpp(41): warning C4482: nonstandard extension used: enum 'Input' used in qualified name
+c:\users\handerson\documents\pong167\sfmlsetup\sfmlsetup\player.cpp(46): warning C4482: nonstandard extension used: enum 'Input' used in qualified name
+c:\users\handerson\documents\pong167\sfmlsetup\sfmlsetup\player.cpp(51): warning C4482: nonstandard extension used: enum 'Input' used in qualified name
+c:\users\handerson\documents\pong167\sfmlsetup\sfmlsetup\player.cpp(55): warning C4482: nonstandard extension used: enum 'Input' used in qualified name
+  SFMLSetUp.vcxproj -> C:\Users\Handerson\Documents\pong167\SFMLSetUp\Debug\SFMLSetUp.exe
