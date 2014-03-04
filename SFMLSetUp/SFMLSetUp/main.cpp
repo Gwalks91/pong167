@@ -12,7 +12,7 @@ sf::Sprite MakeSprite(sf::Texture& texture)
 {
 	sf::Sprite s;
 	s.setTexture(texture);
-	std::cout << "Made Sprite!" << std::endl;
+	std::cout << "Pongo!" << std::endl;
 	return s;
 }
 

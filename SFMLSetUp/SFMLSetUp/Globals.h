@@ -15,7 +15,8 @@ void NormalizeVector(sf::Vector2f &v);
 enum Input 
 {
 	MoveUp = -1,
-	MoveDown = 1
+	MoveDown = 1,
+	NoInput = 0
 };
 
 #endif

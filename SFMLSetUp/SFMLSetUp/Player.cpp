@@ -6,7 +6,7 @@ Player::Player(int pID, sf::Vector2f paddlePos, sf::Keyboard::Key up, sf::Keyboa
 {
 	playerID = pID;
 
-	p = new Paddle(paddlePos, 10.0f, LoadTexture("paddle.png"));
+	p = new Paddle(paddlePos, .5f, LoadTexture("paddle.png"));
 	moveUp = up;
 	moveDown = down;
 
@@ -28,17 +28,27 @@ Paddle* Player::GetPaddle()
 	return p;
 }
 
-void Player::HandleInput(sf::Event e)
+void Player::handleInput()
 {
-	//Add dead Reckoning  
+	bool up = false;
+	bool down = false;
+	
+	//Add dead Reckoning
 	//Send a message to the server to update the main game 
 	if (sf::Keyboard::isKeyPressed(moveUp))
 	{
 		p->MovePaddle(Input::MoveUp);
+		up = true;
 	}
 	if(sf::Keyboard::isKeyPressed(moveDown))
 	{
 		p->MovePaddle(Input::MoveDown);
+		down = true;
+	}
+
+	if(!up && !down)
+	{
+		p->MovePaddle(Input::NoInput);
 	}
 }
 
@@ -50,6 +60,10 @@ int Player::GetScore()
 void Player::Update()
 {
 	//text.setString("Score: " + GetScore());
+	handleInput();
+	//Replace this dummy time with the actual one.
+	sf::Time time;
+	p->Update(time);
 }
 
 void Player::Draw(sf::RenderWindow* w)

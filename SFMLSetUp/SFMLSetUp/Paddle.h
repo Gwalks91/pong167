@@ -17,11 +17,16 @@ public :
 	void Draw(sf::RenderWindow* w);
 private:
 	bool CheckBounds(Input i);
+	bool CheckBoundsPosition(sf::Vector2f pos);
+	bool buttonHeld;
 	sf::Texture pTexture;
 	sf::Sprite pSprite;
 	sf::Vector2f position;
 	sf::Vector2f velocity;
+	float paddleSpeed;
+	float currentSpeed;
 	
+	static const float accel;
 };
 
 #endif
