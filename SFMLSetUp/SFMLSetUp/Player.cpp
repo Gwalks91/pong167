@@ -8,7 +8,7 @@ Player::Player(int pID, sf::Vector2f paddlePos, sf::Keyboard::Key up, sf::Keyboa
 	moveDown(down),
 	score(0)
 {
-	p = new Paddle(paddlePos, 1500.0f, LoadTexture("paddle.png"));
+	p = new Paddle(paddlePos, 600.0f, LoadTexture("paddle.png"));
 }
 
 Player::~Player()
