@@ -41,7 +41,7 @@ void Engine::Update()
 
 		s.Update(elapsedTime);
 	}
-	deltaClock.restart();
+
 }
 	
 void Engine::Draw()
