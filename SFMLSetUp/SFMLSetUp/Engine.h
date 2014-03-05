@@ -27,6 +27,7 @@ private:
 	sf::Clock deltaClock;
 	Score s;
 	sf::Texture backGround;
+	sf::Sprite backgroundSprite;
 	bool startGame;
 };
 

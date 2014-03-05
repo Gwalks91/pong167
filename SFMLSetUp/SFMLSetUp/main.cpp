@@ -26,6 +26,8 @@ int main()
 		e->Draw();
 	}
 
+	delete e;
+
     return 0;
 }
 
