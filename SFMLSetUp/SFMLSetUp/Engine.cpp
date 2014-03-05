@@ -12,7 +12,7 @@ Engine::Engine()
 	player1 = new Player(1, sf::Vector2f(10.0f, 0.0f), sf::Keyboard::W, sf::Keyboard::S);
 	player2 = new Player(2, sf::Vector2f(970.0f, 0.0f), sf::Keyboard::Up, sf::Keyboard::Down);
 
-	ball = new Ball(700.0f, LoadTexture("PongBall.png"));
+	ball = new Ball(300.0f, LoadTexture("PongBall.png"));
 
 	deltaClock = sf::Clock();
 
@@ -29,10 +29,10 @@ Engine::~Engine()
 void Engine::Update()
 {	
 	float elapsedTime = deltaClock.getElapsedTime().asSeconds();
+	deltaClock.restart();
 	if(startGame)
 	{
 		HandleInput();
-
 		CheckCollision();
 
 		player1->Update(elapsedTime);
