@@ -15,6 +15,11 @@ Ball::Ball(float speed, sf::Texture t)
 	goingRight = true;
 }
 
+Ball::~Ball()
+{
+
+}
+
 void Ball::ChangeBallDirection()
 {
 	velocity.x *= (-1.0f);
@@ -30,14 +35,19 @@ bool Ball::GetDirection()
 	return goingRight;
 }
 
-void Ball::Update()
+void Ball::ResetBall()
+{
+	position = sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+}
+
+void Ball::Update(float elapsedTime)
 {
 	CheckBounds();
 	if(velocity.x >= 0)
 		goingRight = true;
 	else
 		goingRight = false;
-	position += velocity;
+	position += velocity * elapsedTime;
 	pSprite.setPosition(position.x, position.y);
 }
 

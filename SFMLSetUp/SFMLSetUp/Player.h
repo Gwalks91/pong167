@@ -12,9 +12,10 @@ public:
 	sf::Keyboard::Key moveUp;
 	sf::Keyboard::Key moveDown;
 	Player(int pID, sf::Vector2f paddlePos, sf::Keyboard::Key up, sf::Keyboard::Key down);
+	~Player();
 	int GetID();
 	Paddle* GetPaddle();
-	void Update();
+	void Update(float elapsedTime);
 	void Draw(sf::RenderWindow* w);
 private:
 	int playerID;
@@ -23,9 +24,7 @@ private:
 	sf::Text text;
 	Paddle* p;
 	int GetScore();
-	sf::Font GetFont(std::string fontFile);
-	sf::Texture LoadTexture(std::string s);
-	void handleInput();
+	void handleInput(float deltaTime);
 };
 
 #endif

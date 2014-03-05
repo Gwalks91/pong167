@@ -1,7 +1,6 @@
 #include "Paddle.h"
 
-const float Paddle::accel = .01;
-const float Paddle::max = .5f;
+const float Paddle::max = .3f;
 
 Paddle::Paddle(sf::Vector2f v, float speed, sf::Texture t)
 {
@@ -15,20 +14,19 @@ Paddle::Paddle(sf::Vector2f v, float speed, sf::Texture t)
 	buttonHeld = false;
 }
 
+Paddle::~Paddle()
+{
+
+}
+
 //Moce the paddle based off of the input enum
-void Paddle::MovePaddle(Input i)
+void Paddle::MovePaddle(Input i, float deltaTime)
 {
 	if(i != NoInput)
 	{
 		buttonHeld = true;
 		
-		//Inc. the speed by the acceleration rate.
-		if(abs(currentSpeed) < max)
-		{
-			currentSpeed += accel * (float)i;
-			//Set the velocity.
-			velocity = sf::Vector2f(0.0f, currentSpeed);
-		}
+		velocity = sf::Vector2f(0.0f, paddleSpeed*(float)i);
 	}
 	else
 	{
@@ -42,10 +40,10 @@ sf::FloatRect Paddle::GetSpriteBoundingBox()
 }
 
 //Going to have to check the collider 
-void Paddle::Update(sf::Time deltaTime)
+void Paddle::Update(float elapsedTime)
 {
 	//Set the position.
-	position += velocity;
+	position += velocity * elapsedTime;
 	
 	if(CheckBoundsPosition(position))
 	{
@@ -55,29 +53,13 @@ void Paddle::Update(sf::Time deltaTime)
 	else
 	{
 		//Reset the position if the move was invalid.
-		position -= velocity;
+		position -= velocity * elapsedTime;
 		pSprite.setPosition(position);
 	}
 
 	if(!buttonHeld)
 	{
-		//Slow the paddle down.		
-		if(std::abs(currentSpeed) > 0.0001)
-		{
-			if(currentSpeed > 0)
-			{
-				currentSpeed -= accel;
-			}
-			else
-			{
-				currentSpeed += accel;
-			}
-			velocity = sf::Vector2f(0.0f, currentSpeed);
-		}
-		else
-		{
-			velocity = sf::Vector2f(0.0f, 0.0f);
-		}
+		velocity = sf::Vector2f(0.0f, 0.0f);
 	}
 }
 

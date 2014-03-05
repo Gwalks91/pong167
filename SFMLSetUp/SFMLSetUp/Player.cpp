@@ -3,19 +3,17 @@
 #include <string>
 
 Player::Player(int pID, sf::Vector2f paddlePos, sf::Keyboard::Key up, sf::Keyboard::Key down)
+	:playerID(pID),
+	moveUp(up),
+	moveDown(down),
+	score(0)
 {
-	playerID = pID;
+	p = new Paddle(paddlePos, 1500.0f, LoadTexture("paddle.png"));
+}
 
-	p = new Paddle(paddlePos, .5f, LoadTexture("paddle.png"));
-	moveUp = up;
-	moveDown = down;
-
-	score = 0;
-
-	font = GetFont("ALGER.ttf");
-	text.setFont(font);
-	text.setPosition(200,0);
-	text.setCharacterSize(12);
+Player::~Player()
+{
+	delete p;
 }
 
 int Player::GetID()
@@ -28,7 +26,7 @@ Paddle* Player::GetPaddle()
 	return p;
 }
 
-void Player::handleInput()
+void Player::handleInput(float deltaTime)
 {
 	bool up = false;
 	bool down = false;
@@ -46,19 +44,19 @@ void Player::handleInput()
 
 	if(!up && !down)
 	{
-		p->MovePaddle(Input::NoInput);
+		p->MovePaddle(Input::NoInput, deltaTime);
 	}
 	else if(up && down)
 	{
-		p->MovePaddle(Input::NoInput);
+		p->MovePaddle(Input::NoInput, deltaTime);
 	}
 	else if(down)
 	{
-		p->MovePaddle(Input::MoveDown);
+		p->MovePaddle(Input::MoveDown, deltaTime);
 	}
 	else if(up)
 	{
-		p->MovePaddle(Input::MoveUp);
+		p->MovePaddle(Input::MoveUp, deltaTime);
 	}
 }
 
@@ -67,37 +65,16 @@ int Player::GetScore()
 	return score;
 }
 
-void Player::Update()
+void Player::Update(float elapsedTime)
 {
 	//text.setString("Score: " + GetScore());
-	handleInput();
+	handleInput(elapsedTime);
 	//Replace this dummy time with the actual one.
-	sf::Time time;
-	p->Update(time);
+	p->Update(elapsedTime);
 }
 
 void Player::Draw(sf::RenderWindow* w)
 {
 	w->draw(text);
 	p->Draw(w);
-}
-
-sf::Font Player::GetFont(std::string fontFile)
-{
-	sf::Font f;
-	if(!f.loadFromFile(fontFile))
-	{
-		std::cout << "Font, " << fontFile << " was not loaded." << std::endl;
-	}
-	return f;
-}
-
-sf::Texture Player::LoadTexture(std::string s)
-{
-	sf::Texture t;
-	if(!t.loadFromFile(s))
-	{
-		std::cout << "An Error has occured!" << std::endl;
-	}
-	return t;
 }

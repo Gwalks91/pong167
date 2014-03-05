@@ -5,12 +5,14 @@
 #include "Globals.h"
 #include "Player.h"
 #include "Ball.h"
+#include "Score.h"
 #include <SFML/Graphics.hpp>
 
 class Engine
 {
 public:
 	Engine();
+	~Engine();
 	void Update();
 	void Draw();
 	sf::RenderWindow* window;
@@ -21,8 +23,9 @@ private:
 	bool wasHit;
 	void HandleInput();
 	void CheckCollision();
-	sf::Clock clock;
-
+	sf::Clock deltaClock;
+	Score s;
+	sf::Texture backGround;
 };
 
 #endif

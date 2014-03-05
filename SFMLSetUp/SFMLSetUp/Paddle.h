@@ -11,9 +11,10 @@ class Paddle
 public :
 	//Paddle();
 	Paddle(sf::Vector2f v, float speed, sf::Texture t);
-	void MovePaddle(Input i);
+	~Paddle();
+	void MovePaddle(Input i, float deltaTime);
 	sf::FloatRect GetSpriteBoundingBox();
-	void Update(sf::Time deltaTime);
+	void Update(float elapsedTime);
 	void Draw(sf::RenderWindow* w);
 private:
 	bool CheckBounds(Input i);
@@ -25,8 +26,7 @@ private:
 	sf::Vector2f velocity;
 	float paddleSpeed;
 	float currentSpeed;
-	
-	static const float accel;
+
 	static const float max;
 };
 

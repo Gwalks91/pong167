@@ -11,10 +11,12 @@ class Ball
 {
 public:
 	Ball(float speed, sf::Texture t);
+	~Ball();
 	sf::FloatRect GetSpriteBoundingBox(); 
 	void ChangeBallDirection();
 	bool GetDirection();
-	void Update();
+	void ResetBall();
+	void Update(float elapsedTime);
 	void Draw(sf::RenderWindow* w);
 private:
 	sf::Vector2f MakeRandomVector();
