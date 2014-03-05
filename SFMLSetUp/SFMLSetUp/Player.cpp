@@ -67,14 +67,11 @@ int Player::GetScore()
 
 void Player::Update(float elapsedTime)
 {
-	//text.setString("Score: " + GetScore());
 	handleInput(elapsedTime);
-	//Replace this dummy time with the actual one.
 	p->Update(elapsedTime);
 }
 
 void Player::Draw(sf::RenderWindow* w)
 {
-	w->draw(text);
 	p->Draw(w);
 }

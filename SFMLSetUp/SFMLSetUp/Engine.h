@@ -13,6 +13,7 @@ class Engine
 public:
 	Engine();
 	~Engine();
+	void StartGame();
 	void Update();
 	void Draw();
 	sf::RenderWindow* window;
@@ -26,6 +27,7 @@ private:
 	sf::Clock deltaClock;
 	Score s;
 	sf::Texture backGround;
+	bool startGame;
 };
 
 #endif

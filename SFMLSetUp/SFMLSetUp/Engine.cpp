@@ -4,7 +4,8 @@
 
 Engine::Engine()
 	:s(),
-	wasHit(false)
+	wasHit(false),
+	startGame(true)
 {
 	window = new sf::RenderWindow(sf::VideoMode(1000, 550), "SFML works!");
 
@@ -12,6 +13,8 @@ Engine::Engine()
 	player2 = new Player(2, sf::Vector2f(970.0f, 0.0f), sf::Keyboard::Up, sf::Keyboard::Down);
 
 	ball = new Ball(700.0f, LoadTexture("PongBall.png"));
+
+	deltaClock = sf::Clock();
 
 	//backGround = LoadTexture("Pokemon-Stadium.jpeg");
 }
@@ -26,17 +29,18 @@ Engine::~Engine()
 void Engine::Update()
 {	
 	float elapsedTime = deltaClock.getElapsedTime().asSeconds();
+	if(startGame)
+	{
+		HandleInput();
 
-	HandleInput();
+		CheckCollision();
 
-	CheckCollision();
+		player1->Update(elapsedTime);
+		player2->Update(elapsedTime);
+		ball->Update(elapsedTime);
 
-	player1->Update(elapsedTime);
-	player2->Update(elapsedTime);
-	ball->Update(elapsedTime);
-
-	s.Update(elapsedTime);
-
+		s.Update(elapsedTime);
+	}
 	deltaClock.restart();
 }
 	
@@ -92,10 +96,15 @@ void Engine::CheckCollision()
 		s.ChangeScore(2);
 		ball->ResetBall();
 	}
-	if(ball->GetSpriteBoundingBox().left + ball->GetSpriteBoundingBox().width >= SCREEN_WIDTH)
+	if(ball->GetSpriteBoundingBox().left + ball->GetSpriteBoundingBox().width > SCREEN_WIDTH)
 	{
 		s.ChangeScore(1);
 		ball->ResetBall();
 	}
 
+}
+
+void Engine::StartGame()
+{
+	startGame = true;
 }

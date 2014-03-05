@@ -38,6 +38,7 @@ bool Ball::GetDirection()
 void Ball::ResetBall()
 {
 	position = sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+	pSprite.setPosition(position.x, position.y);
 }
 
 void Ball::Update(float elapsedTime)

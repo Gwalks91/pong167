@@ -20,8 +20,6 @@ public:
 private:
 	int playerID;
 	int score;
-	sf::Font font;
-	sf::Text text;
 	Paddle* p;
 	int GetScore();
 	void handleInput(float deltaTime);
