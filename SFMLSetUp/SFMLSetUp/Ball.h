@@ -29,6 +29,7 @@ private:
 	sf::Sprite pSprite;
 	sf::Vector2f position;
 	sf::Vector2f velocity;
+
 };
 
 #endif

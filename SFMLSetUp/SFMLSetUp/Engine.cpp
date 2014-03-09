@@ -6,7 +6,7 @@ Engine::Engine()
 	:s(),
 	wasHit(false)
 {
-	window = new sf::RenderWindow(sf::VideoMode(1280, 720), "PokePong!");
+	window = new sf::RenderWindow(sf::VideoMode(1000, 500), "PokePong!");
 
 	player1 = new Player(1, sf::Vector2f(10.0f, 0.0f), sf::Keyboard::W, sf::Keyboard::S);
 	player2 = new Player(2, sf::Vector2f(970.0f, 0.0f), sf::Keyboard::Up, sf::Keyboard::Down);
@@ -15,7 +15,7 @@ Engine::Engine()
 
 	backGround = LoadTexture("PokemonStadium.png");
 	backgroundSprite.setTexture(backGround);
-	backgroundSprite.setScale(SCREEN_WIDTH/*backgroundSprite.getLocalBounds().width*/ , SCREEN_HEIGHT/*backgroundSprite.getLocalBounds().height*/);
+	backgroundSprite.setScale(SCREEN_WIDTH/backgroundSprite.getLocalBounds().width , SCREEN_HEIGHT/backgroundSprite.getLocalBounds().height);
 }
 
 Engine::~Engine()

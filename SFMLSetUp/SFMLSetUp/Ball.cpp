@@ -12,6 +12,9 @@ Ball::Ball(float speed, sf::Texture t)
 	pSprite.setTexture(pTexture);
 	pSprite.setPosition(position);
 
+
+
+
 	goingRight = true;
 }
 
@@ -73,8 +76,13 @@ void Ball::CheckBounds()
 	}
 }
 
+//Take in Velocity vector/ spits out new Location based on dead reckoning.
 void Ball::ballDeadReck()
 {
+	sf::Vector2f deadReckVelocity(velocity.x, velocity.y);
+	sf::Vector2f newPosition(position.x, position.y);
+
+	position = newPosition;
 }
 
 //Function that makes a new Vector2f in a random direction that is normalized
