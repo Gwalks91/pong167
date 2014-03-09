@@ -18,6 +18,7 @@ public:
 	void ResetBall();
 	void Update(float elapsedTime);
 	void Draw(sf::RenderWindow* w);
+	void ballDeadReck();
 private:
 	sf::Vector2f MakeRandomVector();
 	void CheckBounds();

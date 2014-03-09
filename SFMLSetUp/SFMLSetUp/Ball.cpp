@@ -73,6 +73,10 @@ void Ball::CheckBounds()
 	}
 }
 
+void Ball::ballDeadReck()
+{
+}
+
 //Function that makes a new Vector2f in a random direction that is normalized
 sf::Vector2f Ball::MakeRandomVector()
 {
