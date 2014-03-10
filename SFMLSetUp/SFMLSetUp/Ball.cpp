@@ -2,6 +2,7 @@
 #include "Ball.h"
 
 
+
 Ball::Ball(float speed, sf::Texture t)
 {
 	std::srand(std::time(NULL));
@@ -76,13 +77,30 @@ void Ball::CheckBounds()
 	}
 }
 
-//Take in Velocity vector/ spits out new Location based on dead reckoning.
-void Ball::ballDeadReck()
-{
-	sf::Vector2f deadReckVelocity(velocity.x, velocity.y);
-	sf::Vector2f newPosition(position.x, position.y);
 
-	position = newPosition;
+void Ball::ballDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f &newPosition)
+{
+	//Dead reck code
+
+	//Time based on system
+	time_t now = time(0);
+	struct tm * ptm;
+
+	//convert to utc
+	time(&now);
+	ptm = gmtime(&now);
+
+	//utc hour and minutes
+	int t1Hour = (ptm->tm_hour+UTC)%24;
+	int t1Minutes = (ptm->tm_min);
+	//?? need different time for this part
+	int t4Hour = (ptm->tm_hour+UTC)%24;
+	int t4Minutes = (ptm->tm_min);
+	
+	
+	//does latency
+	int latency = ((t4Hour - t1Hour) + (t4Minutes - t1Minutes))/2;
+	newPosition = position;// + //(deadReckVelocity * (latency));
 }
 
 //Function that makes a new Vector2f in a random direction that is normalized

@@ -17,6 +17,7 @@ public:
 	Paddle* GetPaddle();
 	void Update(float elapsedTime);
 	void Draw(sf::RenderWindow* w);
+	void deadReck();
 private:
 	int playerID;
 	int score;
