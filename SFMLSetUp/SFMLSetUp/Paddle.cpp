@@ -12,6 +12,9 @@ Paddle::Paddle(sf::Vector2f v, float speed, sf::Texture t)
 	pSprite.setTexture(pTexture);
 	pSprite.setPosition(position);
 	buttonHeld = false;
+
+	//deadreck
+	latency = 0.0;
 }
 
 Paddle::~Paddle()
@@ -44,6 +47,8 @@ void Paddle::Update(float elapsedTime)
 {
 	//Set the position.
 	position += velocity * elapsedTime;
+
+	//paddleDeadReck(velocity*elapsedTime, position*elapsedTime, latency);
 	
 	if(CheckBoundsPosition(position))
 	{
@@ -55,6 +60,7 @@ void Paddle::Update(float elapsedTime)
 		//Reset the position if the move was invalid.
 		position -= velocity * elapsedTime;
 		pSprite.setPosition(position);
+		
 	}
 
 	if(!buttonHeld)
@@ -77,6 +83,16 @@ bool Paddle::CheckBounds(Input i)
 	return true;
 }
 
+//deadreck
+void Paddle::paddleDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f CurrentPosition, double latency)
+{
+	position += sf::Vector2f(deadReckVelocity.x * CurrentPosition.x * latency, deadReckVelocity.y * CurrentPosition.y * latency);
+
+	if(!CheckBoundsPosition(position))
+	{
+		position -= sf::Vector2f(deadReckVelocity.x * CurrentPosition.x * latency, deadReckVelocity.y * CurrentPosition.y * latency);
+	}
+}
 bool Paddle::CheckBoundsPosition(sf::Vector2f pos)
 {
 	if((pos.y <= 0) || (pos.y >= SCREEN_HEIGHT - pSprite.getGlobalBounds().height))

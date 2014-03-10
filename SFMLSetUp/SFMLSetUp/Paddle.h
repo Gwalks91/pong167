@@ -16,6 +16,7 @@ public :
 	sf::FloatRect GetSpriteBoundingBox();
 	void Update(float elapsedTime);
 	void Draw(sf::RenderWindow* w);
+	void paddleDeadReck(sf::Vector2f, sf::Vector2f , double);
 private:
 	bool CheckBounds(Input i);
 	bool CheckBoundsPosition(sf::Vector2f pos);
@@ -26,6 +27,8 @@ private:
 	sf::Vector2f velocity;
 	float paddleSpeed;
 	float currentSpeed;
+
+	double latency; //deadreck
 
 	static const float max;
 };

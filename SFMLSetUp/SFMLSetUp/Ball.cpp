@@ -13,6 +13,9 @@ Ball::Ball(float speed, sf::Texture t)
 	pSprite.setTexture(pTexture);
 	pSprite.setPosition(position);
 
+	
+	latency = 15;
+
 
 
 
@@ -52,8 +55,13 @@ void Ball::Update(float elapsedTime)
 		goingRight = true;
 	else
 		goingRight = false;
-	position += velocity * elapsedTime;
+	
+	//position += velocity * elapsedTime;
 	pSprite.setPosition(position.x, position.y);
+	ballDeadReck(velocity*elapsedTime, position*elapsedTime, latency);
+
+
+
 }
 
 void Ball::Draw(sf::RenderWindow* w)
@@ -78,9 +86,19 @@ void Ball::CheckBounds()
 }
 
 
-void Ball::ballDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f &newPosition)
+void Ball::ballDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f CurrentPosition, double latency)
 {
-	//Dead reck code
+	sf::Vector2f newDirection;
+
+	newDirection = sf::Vector2f(deadReckVelocity.x * CurrentPosition.x * latency, deadReckVelocity.y * CurrentPosition.y * latency);
+
+	position += newDirection;
+
+	
+
+	//newDirection = 
+
+	/*//Dead reck code
 
 	//Time based on system
 	time_t now = time(0);
@@ -100,7 +118,10 @@ void Ball::ballDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f &newPosition
 	
 	//does latency
 	int latency = ((t4Hour - t1Hour) + (t4Minutes - t1Minutes))/2;
-	newPosition = position;// + //(deadReckVelocity * (latency));
+	newPosition = position;// + //(deadReckVelocity * (latency));*/
+
+
+	
 }
 
 //Function that makes a new Vector2f in a random direction that is normalized
