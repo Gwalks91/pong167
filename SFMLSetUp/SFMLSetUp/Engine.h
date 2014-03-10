@@ -14,6 +14,7 @@ public:
 	Engine();
 	~Engine();
 	void StartGame();
+	void EndGame(int playerID);
 	void Update();
 	void Draw();
 	sf::RenderWindow* window;

@@ -4,7 +4,8 @@
 
 Engine::Engine()
 	:s(),
-	wasHit(false)
+	wasHit(false),
+	startGame(true)
 {
 	window = new sf::RenderWindow(sf::VideoMode(1000, 550), "SFML works!");
 
@@ -16,6 +17,8 @@ Engine::Engine()
 	backGround = LoadTexture("PokemonStadium.png");
 	backgroundSprite.setTexture(backGround);
 	backgroundSprite.setScale(SCREEN_WIDTH/backgroundSprite.getLocalBounds().width , SCREEN_HEIGHT/backgroundSprite.getLocalBounds().height);
+
+	deltaClock = sf::Clock();
 }
 
 Engine::~Engine()
@@ -26,20 +29,43 @@ Engine::~Engine()
 	delete window;
 }
 
+void Engine::StartGame()
+{
+	startGame = true;
+}
+
+void Engine::EndGame(int playerID)
+{
+	startGame = false;
+	switch (playerID)
+	{
+	case 1:
+		//Show a texture for the player 1 win
+		break;
+	case 2:
+		//Show a texture for the player 2 win
+		break;
+
+	}
+}
+
 void Engine::Update()
 {	
 	float elapsedTime = deltaClock.getElapsedTime().asSeconds();
 	deltaClock.restart();
+	
+	if(startGame)
+	{
+		HandleInput();
 
-	HandleInput();
+		CheckCollision();
 
-	CheckCollision();
+		player1->Update(elapsedTime);
+		player2->Update(elapsedTime);
+		ball->Update(elapsedTime);
 
-	player1->Update(elapsedTime);
-	player2->Update(elapsedTime);
-	ball->Update(elapsedTime);
-
-	s.Update(elapsedTime);
+		s.Update(elapsedTime);
+	}
 }
 	
 void Engine::Draw()
