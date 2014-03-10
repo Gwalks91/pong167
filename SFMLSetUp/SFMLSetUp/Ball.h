@@ -32,6 +32,7 @@ private:
 	sf::Vector2f position;
 	sf::Vector2f velocity;
 	
+	sf::Vector2f newPosition;
 	double latency;
 
 };

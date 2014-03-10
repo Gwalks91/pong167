@@ -13,11 +13,9 @@ Ball::Ball(float speed, sf::Texture t)
 	pSprite.setTexture(pTexture);
 	pSprite.setPosition(position);
 
-	
-	latency = 15;
-
-
-
+	//latency to test deadreck
+	latency = 200.95; //simulating latency
+	newPosition = sf::Vector2f(0.0f,0.0f);
 
 	goingRight = true;
 }
@@ -56,9 +54,12 @@ void Ball::Update(float elapsedTime)
 	else
 		goingRight = false;
 	
-	//position += velocity * elapsedTime;
-	pSprite.setPosition(position.x, position.y);
-	ballDeadReck(velocity*elapsedTime, position*elapsedTime, latency);
+	//old Position
+	position += velocity * elapsedTime;
+	//pSprite.setPosition(position.x, position.y);
+	//deadreck takes in elapsed velocity with latency and uses it on  old_Position
+	ballDeadReck(velocity*elapsedTime, position, latency);
+	pSprite.setPosition(newPosition.x, newPosition.y);
 
 
 
@@ -85,15 +86,11 @@ void Ball::CheckBounds()
 	}
 }
 
-
-void Ball::ballDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f CurrentPosition, double latency)
+void Ball::ballDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Position, double latency)
 {
-	sf::Vector2f newDirection;
-
-	newDirection = sf::Vector2f(deadReckVelocity.x * CurrentPosition.x * latency, deadReckVelocity.y * CurrentPosition.y * latency);
-
-	position += newDirection;
-
+	//takes in the old position and merges it with the velocity and latency
+	newPosition = old_Position + deadReckVelocity*float(latency);
+	
 	
 
 	//newDirection = 

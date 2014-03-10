@@ -29,6 +29,7 @@ private:
 	float currentSpeed;
 
 	double latency; //deadreck
+	sf::Vector2f newPosition;
 
 	static const float max;
 };
