@@ -14,7 +14,7 @@ Paddle::Paddle(sf::Vector2f v, float speed, sf::Texture t)
 	buttonHeld = false;
 
 	//deadreck
-	latency = 200.95;
+	latency = 400.0; //simulating latency
 	newPosition = sf::Vector2f (0.0f,0.0f);
 }
 
@@ -48,17 +48,21 @@ void Paddle::Update(float elapsedTime)
 {
 	//Set the position.
 	position += velocity * elapsedTime; //original position
-	paddleDeadReck(velocity*elapsedTime, position, latency); //deadreck position
 	
-	if(CheckBoundsPosition(newPosition/*position*/)) 
+	
+	if(CheckBoundsPosition(newPosition)) 
 	{
 		//Set position if move was valid.
-		pSprite.setPosition(newPosition/*position*/);
+		pSprite.setPosition(position);
+		paddleDeadReck(velocity*elapsedTime, position, latency); //deadreck position
+		pSprite.setPosition(newPosition);
+
 	}
 	else
 	{
 		//Reset the position if the move was invalid.
 		position -= velocity * elapsedTime;
+		pSprite.setPosition(position);
 		paddleDeadReck(velocity*elapsedTime, position, latency);
 		pSprite.setPosition(newPosition/*position*/);
 		
@@ -87,7 +91,7 @@ bool Paddle::CheckBounds(Input i)
 
 void Paddle::paddleDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Position, double latency)
 {
-	//paddle deadwreck
+	//paddle deadreck
 	newPosition = old_Position + deadReckVelocity*float(latency);
 
 }
