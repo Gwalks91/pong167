@@ -28,9 +28,7 @@ Client::~Client()
 		if(clientThread != nullptr)
 		{
 			clientThread->terminate();
-			delete clientThread;
 		}
-		delete socket;
 	}
 }
 

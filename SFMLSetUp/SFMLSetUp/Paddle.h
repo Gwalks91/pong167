@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include "Globals.h"
 #include <iostream>
+#include <string>
 
 class Paddle
 {
@@ -19,6 +20,7 @@ public :
 	void paddleDeadReck(sf::Vector2f velocity, sf::Vector2f position, double latency);
 	inline void setAsServer()
 	{ serverControl = true; }
+	std::string getPositionAndVelocityString();
 private:
 	bool CheckBounds(Input i);
 	bool CheckBoundsPosition(sf::Vector2f pos);

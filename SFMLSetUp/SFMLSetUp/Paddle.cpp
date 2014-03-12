@@ -1,5 +1,7 @@
 #include "Paddle.h"
 
+#include <sstream>
+
 const float Paddle::max = .3f;
 
 Paddle::Paddle(bool server, sf::Vector2f v, float speed, sf::Texture t)
@@ -129,4 +131,11 @@ bool Paddle::CheckBoundsPosition(sf::Vector2f pos)
 		return false;
 	}
 	return true;
+}
+
+std::string Paddle::getPositionAndVelocityString()
+{
+	std::stringstream positionAndVelocity;
+	positionAndVelocity << position.x << " " << position.y << " " << velocity.x << " " << velocity.y;
+	return positionAndVelocity.str();
 }

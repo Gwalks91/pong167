@@ -4,7 +4,7 @@
 const int SCREEN_WIDTH = 1000;
 const int SCREEN_HEIGHT = 550;
 
-const bool NETWORKED = false;
+const bool NETWORKED = true;
 
 sf::Texture LoadTexture(std::string s)
 {

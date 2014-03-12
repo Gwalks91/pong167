@@ -14,7 +14,6 @@ class Engine
 public:
 	Engine();
 	~Engine();
-	void StartGame();
 	void Update();
 	void Draw();
 	sf::RenderWindow* window;

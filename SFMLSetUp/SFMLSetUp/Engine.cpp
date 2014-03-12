@@ -25,7 +25,9 @@ Engine::Engine()
 	}
 	else
 	{
-		client = Client("127.0.0.1", 4455);
+		//Try to connect to the server.
+		client = Client("128.195.51.251", 4455);
+		startGame = false;
 	}
 }
 
@@ -39,120 +41,125 @@ Engine::~Engine()
 
 void Engine::Update()
 {	
-	if(startGame)
+	if(NETWORKED)
 	{
-		if(NETWORKED)
+		while(!client.isPacketQueueEmpty())
 		{
-			while(!client.isPacketQueueEmpty())
+			sf::Packet recievedPacket = client.getTopPacket();
+			std::string stringReceived;
+			recievedPacket >> stringReceived;
+
+			//Grab the number from the string and set up parsing helpers.
+			int currentPos = 0;
+			int posOfNextSpace = 0;
+			std::string subString = "";
+
+			posOfNextSpace = stringReceived.find(" ");
+			//Place the number in the substring.
+			subString = stringReceived.substr(currentPos, posOfNextSpace);
+
+			if(atoi(subString.c_str()) == 0)
 			{
-				sf::Packet recievedPacket = client.getTopPacket();
-				std::string stringReceived;
-				recievedPacket >> stringReceived;
-
-				//Grab the number from the string and set up parsing helpers.
-				int currentPos = 0;
-				int posOfNextSpace = 0;
-				std::string subString = "";
-
-				posOfNextSpace = stringReceived.find(" ");
-				//Place the number in the substring.
+				currentPos = posOfNextSpace;
+				posOfNextSpace = stringReceived.find(" ", currentPos + 1);
+				//Find out which is a somputer and which is a client.
 				subString = stringReceived.substr(currentPos, posOfNextSpace);
+				clientNumber = atoi(subString.c_str());
 
-				if(atoi(subString.c_str()) == 0)
+				//Start the game.
+				startGame = true;
+			
+				//Sending the client time.
+				std::time_t rawtime;
+				std::time(&rawtime);
+
+				std::stringstream clientStartStream;
+				clientStartStream << "0 " << clientNumber << " " << rawtime;
+				client.send(clientStartStream.str());
+					
+				if(clientNumber == 1)
+				{
+					player2->setAsServer();
+				}
+				else
+				{
+					player1->setAsServer();
+				}
+
+				//Start the main update loop and start message sending and recieving.
+			}
+			else if(atoi(subString.c_str()) == 1 || atoi(subString.c_str()) == 2)
+			{
+				//Update the ball/paddle and set new velocity and accel. 
+				//for dead reackoning.
+				//Function to set balls server position and velocity and interpolate towards it.
+				int clientToDeadReck = 0;
+				if(atoi(subString.c_str()) == 2)
 				{
 					currentPos = posOfNextSpace;
 					posOfNextSpace = stringReceived.find(" ", currentPos + 1);
-					//Find out which is a somputer and which is a client.
 					subString = stringReceived.substr(currentPos, posOfNextSpace);
-					clientNumber = atoi(subString.c_str());
+					clientToDeadReck = atoi(subString.c_str());
+				}
 
-					//Start the game.
-					startGame = true;
-			
-					//Sending the client time.
-					std::time_t rawtime;
-					std::time(&rawtime);
+				currentPos = posOfNextSpace;
+				posOfNextSpace = stringReceived.find(" ", currentPos + 1);
+				subString = stringReceived.substr(currentPos, posOfNextSpace);
+				float xPosition = std::stof(subString.c_str());
+				
+				currentPos = posOfNextSpace;
+				posOfNextSpace = stringReceived.find(" ", currentPos + 1);
+				subString = stringReceived.substr(currentPos, posOfNextSpace);
+				float yPosition = std::stof(subString.c_str());
 
-					std::stringstream clientStartStream;
-					clientStartStream << "0 " << clientNumber << " " << rawtime;
-					client.send(clientStartStream.str());
-					
+				currentPos = posOfNextSpace;
+				posOfNextSpace = stringReceived.find(" ", currentPos + 1);
+				subString = stringReceived.substr(currentPos, posOfNextSpace);
+				float xVelocity = std::stof(subString.c_str());
+
+				currentPos = posOfNextSpace;
+				posOfNextSpace = stringReceived.find(" ", currentPos + 1);
+				subString = stringReceived.substr(currentPos, posOfNextSpace);
+				float yVelocity = std::stof(subString.c_str());
+
+				if(atoi(subString.c_str()) == 1)
+				{
+					ball->ballDeadReck(sf::Vector2f(xPosition, yPosition), sf::Vector2f(xVelocity, yVelocity), 0);
+				}
+				else
+				{
 					if(clientNumber == 1)
 					{
-						player2->setAsServer();
+						player2->deadReck(sf::Vector2f(xPosition, yPosition), sf::Vector2f(xVelocity, yVelocity), 0);
 					}
 					else
 					{
-						player1->setAsServer();
-					}
-
-					//Start the main update loop and start message sending and recieving.
-				}
-				else if(atoi(subString.c_str()) == 1 || atoi(subString.c_str()) == 2)
-				{
-					//Update the ball/paddle and set new velocity and accel. 
-					//for dead reackoning.
-					//Function to set balls server position and velocity and interpolate towards it.
-					currentPos = posOfNextSpace;
-					posOfNextSpace = stringReceived.find(" ", currentPos + 1);
-					//Find out who got the point.
-					subString = stringReceived.substr(currentPos, posOfNextSpace);
-					float xPosition = std::stof(subString.c_str());
-				
-					currentPos = posOfNextSpace;
-					posOfNextSpace = stringReceived.find(" ", currentPos + 1);
-					//Find out who got the point.
-					subString = stringReceived.substr(currentPos, posOfNextSpace);
-					float yPosition = std::stof(subString.c_str());
-
-					currentPos = posOfNextSpace;
-					posOfNextSpace = stringReceived.find(" ", currentPos + 1);
-					//Find out who got the point.
-					subString = stringReceived.substr(currentPos, posOfNextSpace);
-					float xVelocity = std::stof(subString.c_str());
-
-					currentPos = posOfNextSpace;
-					posOfNextSpace = stringReceived.find(" ", currentPos + 1);
-					//Find out who got the point.
-					subString = stringReceived.substr(currentPos, posOfNextSpace);
-					float yVelocity = std::stof(subString.c_str());
-
-					if(atoi(subString.c_str()) == 1)
-					{
-						ball->ballDeadReck(sf::Vector2f(xPosition, yPosition), sf::Vector2f(xVelocity, yVelocity), 0);
-					}
-					else
-					{
-						if(clientNumber == 1)
-						{
-							player2->deadReck(sf::Vector2f(xPosition, yPosition), sf::Vector2f(xVelocity, yVelocity), 0);
-						}
-						else
-						{
-							player1->deadReck(sf::Vector2f(xPosition, yPosition), sf::Vector2f(xVelocity, yVelocity), 0);
-						}
-					}
-				}
-				else if(atoi(subString.c_str()) == 3)
-				{
-					currentPos = posOfNextSpace;
-					posOfNextSpace = stringReceived.find(" ", currentPos + 1);
-					//Find out who got the point.
-					subString = stringReceived.substr(currentPos, posOfNextSpace);
-					int pointEarner = atoi(subString.c_str());
-
-					if(pointEarner == 1)
-					{	
-						s.ChangeScore(1);
-					}
-					else
-					{
-						s.ChangeScore(2);
+						player1->deadReck(sf::Vector2f(xPosition, yPosition), sf::Vector2f(xVelocity, yVelocity), 0);
 					}
 				}
 			}
-		}
+			else if(atoi(subString.c_str()) == 3)
+			{
+				currentPos = posOfNextSpace;
+				posOfNextSpace = stringReceived.find(" ", currentPos + 1);
+				//Find out who got the point.
+				subString = stringReceived.substr(currentPos, posOfNextSpace);
+				int pointEarner = atoi(subString.c_str());
 
+				if(pointEarner == 1)
+				{	
+					s.ChangeScore(1);
+				}
+				else
+				{
+					s.ChangeScore(2);
+				}
+			}
+		}
+	}
+
+	if(startGame)
+	{	
 		float elapsedTime = deltaClock.getElapsedTime().asSeconds();
 		deltaClock.restart();
 
@@ -164,13 +171,32 @@ void Engine::Update()
 
 		s.Update(elapsedTime);
 
+		//If we are online we want to send our information to the Server.
+		if(NETWORKED)
+		{
+			std::stringstream paddleString;
+			if(clientNumber == 1)
+			{
+				std::time_t rawtime;
+				std::time(&rawtime);
+
+				paddleString << "2 " << clientNumber << " " << player1->GetPaddle()->getPositionAndVelocityString() << " " << rawtime;
+			}
+			else
+			{
+				std::time_t rawtime;
+				std::time(&rawtime);
+
+				paddleString << "2 " << clientNumber << " " << player2->GetPaddle()->getPositionAndVelocityString() << " " << rawtime;
+			}
+		}
+
 		if(s.winnerIs() != 0)
 		{
 			startGame = false;
 		}
+		HandleInput();
 	}
-
-	HandleInput();
 }
 	
 void Engine::Draw()
@@ -198,6 +224,7 @@ void Engine::Draw()
 	}
     window->display();
 }
+
 
 void Engine::HandleInput()
 {

@@ -16,7 +16,10 @@ Ball::Ball(float speed, sf::Texture t)
 
 	goingRight = true;
 
-	doneFollowingServer = true;
+	if(!NETWORKED)
+	{
+		doneFollowingServer = true;
+	}
 }
 
 Ball::~Ball()
