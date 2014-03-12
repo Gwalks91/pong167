@@ -3,10 +3,12 @@
 Client::Client()
 {
 	connected = false;
+	clientThread == nullptr;
 }
 
 Client::Client(const std::string& ipAddress, const int& port)
 {
+	clientThread == nullptr;
 	socket = new sf::TcpSocket;
 	sf::Socket::Status status = socket->connect(ipAddress, port);
 	selector.add(*socket);
@@ -21,10 +23,15 @@ Client::Client(const std::string& ipAddress, const int& port)
 Client::~Client()
 {
 	//Saftly end the thread and delete it.
-	connected = false;
-	clientThread->terminate();
-	delete clientThread;
-	delete socket;
+	if(connected)
+	{
+		if(clientThread != nullptr)
+		{
+			clientThread->terminate();
+			delete clientThread;
+		}
+		delete socket;
+	}
 }
 
 void Client::connect(const std::string& ipAddress, const int& port)

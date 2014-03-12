@@ -1,8 +1,6 @@
 
 #include "Ball.h"
 
-
-
 Ball::Ball(float speed, sf::Texture t)
 {
 	std::srand(std::time(NULL));
@@ -13,16 +11,16 @@ Ball::Ball(float speed, sf::Texture t)
 	pSprite.setTexture(pTexture);
 	pSprite.setPosition(position);
 
-	//latency to test deadreck
-	latency = 400.0; //simulating latency
+	//deadreck
 	newPosition = sf::Vector2f(0.0f,0.0f);
 
 	goingRight = true;
+
+	doneFollowingServer = true;
 }
 
 Ball::~Ball()
 {
-
 }
 
 void Ball::ChangeBallDirection()
@@ -48,22 +46,34 @@ void Ball::ResetBall()
 
 void Ball::Update(float elapsedTime)
 {
-	CheckBounds();
-	if(velocity.x >= 0)
-		goingRight = true;
-	else
-		goingRight = false;
+	if(doneFollowingServer)
+	{
+		CheckBounds();
+		if(velocity.x >= 0)
+			goingRight = true;
+		else
+			goingRight = false;
 	
-	//old Position
-	position += velocity * elapsedTime;
-	pSprite.setPosition(position.x, position.y);
+		//old Position
+		position += velocity * elapsedTime;
+		pSprite.setPosition(position.x, position.y);
 
-	//deadreck takes in elapsed velocity with latency and uses it on  old_Position
-	ballDeadReck(velocity*elapsedTime, position, latency);
-	pSprite.setPosition(newPosition.x, newPosition.y);
-
-
-
+		if(position.x < 0 || position.x > SCREEN_WIDTH)
+		{
+			ResetBall();
+		}
+	}
+	if(NETWORKED && !doneFollowingServer)
+	{
+		position +=  position * (newPosition.x * velocity.y - newPosition.y * velocity.x) * elapsedTime;
+		if(DistanceBetweenVectors(position, newPosition) == .0001)
+		{
+			position = newPosition;
+			velocity = sf::Vector2f(0.0f, 0.0f);
+			doneFollowingServer = true;
+		}
+		pSprite.setPosition(position.x, position.y);
+	}
 }
 
 void Ball::Draw(sf::RenderWindow* w)
@@ -89,10 +99,14 @@ void Ball::CheckBounds()
 
 void Ball::ballDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Position, double latency)
 {
-	//DeadReckoning
-	//Current Position = Old position + Velocity * latency
-	//takes in the old position and merges it with the velocity and latency
-	newPosition = old_Position + deadReckVelocity * float(latency);
+	//paddle deadreck
+	//Set the location from the server to be the 
+	newPosition = sf::Vector2f(old_Position.x - position.x, old_Position.y - position.y);
+	NormalizeVector(newPosition);
+
+	//Set the velocity to catch up with the lag. TO-DO
+	velocity = sf::Vector2f(deadReckVelocity.x, deadReckVelocity.y);
+	doneFollowingServer = false;
 }
 
 //Function that makes a new Vector2f in a random direction that is normalized

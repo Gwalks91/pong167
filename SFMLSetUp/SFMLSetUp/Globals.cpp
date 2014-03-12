@@ -4,6 +4,8 @@
 const int SCREEN_WIDTH = 1000;
 const int SCREEN_HEIGHT = 550;
 
+const bool NETWORKED = false;
+
 sf::Texture LoadTexture(std::string s)
 {
 	sf::Texture t;
@@ -42,4 +44,12 @@ std::string ConvertToString(int num)
 	Result = convert.str(); // set 'Result' to the contents of the stream
 
 	return Result;
+}
+
+float DistanceBetweenVectors(sf::Vector2f &v1, sf::Vector2f &v2)
+{
+	float xPart = std::pow(v1.x - v2.x, 2);
+	float yPart = std::pow(v1.y - v2.y, 2);
+	float final = std::sqrt(xPart + yPart);
+	return final;
 }

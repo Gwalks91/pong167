@@ -12,7 +12,7 @@ Score::Score()
 	text.setPosition(SCREEN_WIDTH/2, 0);
 	text.setStyle(sf::Text::Bold);
 	text.setCharacterSize(20);
-
+	winner = 0;
 }
 
 
@@ -37,6 +37,15 @@ void Score::ChangeScore(int id)
 void Score::Update(float elapsedTime)
 {
 	text.setString(ConvertToString(player1Score) + " : " + ConvertToString(player2Score));
+	
+	if(player1Score >= MAX_POINTS)
+	{
+		winner = 1;
+	}
+	if(player2Score >= MAX_POINTS)
+	{
+		winner = 2;
+	}
 }
 
 void Score::Draw(sf::RenderWindow* w)

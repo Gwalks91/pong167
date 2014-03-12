@@ -17,6 +17,10 @@ public:
 	Paddle* GetPaddle();
 	void Update(float elapsedTime);
 	void Draw(sf::RenderWindow* w);
+	void setAsServer()
+	{ p->setAsServer(); }
+	void deadReck(sf::Vector2f velocity, sf::Vector2f position, double latency)
+	{ p->paddleDeadReck(velocity, position, latency); }
 private:
 	int playerID;
 	int score;
