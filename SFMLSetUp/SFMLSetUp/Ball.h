@@ -7,6 +7,8 @@
 #include "Globals.h"
 #include <time.h>
 
+#define UTC (0)
+
 class Ball
 {
 public:
@@ -18,6 +20,7 @@ public:
 	void ResetBall();
 	void Update(float elapsedTime);
 	void Draw(sf::RenderWindow* w);
+	void ballDeadReck(sf::Vector2f, sf::Vector2f , double);
 private:
 	sf::Vector2f MakeRandomVector();
 	void CheckBounds();
@@ -28,6 +31,10 @@ private:
 	sf::Sprite pSprite;
 	sf::Vector2f position;
 	sf::Vector2f velocity;
+	
+	sf::Vector2f newPosition;
+	double latency;
+
 };
 
 #endif

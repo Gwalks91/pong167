@@ -2,6 +2,7 @@
 #include "Ball.h"
 
 
+
 Ball::Ball(float speed, sf::Texture t)
 {
 	std::srand(std::time(NULL));
@@ -11,6 +12,10 @@ Ball::Ball(float speed, sf::Texture t)
 	pTexture = t;
 	pSprite.setTexture(pTexture);
 	pSprite.setPosition(position);
+
+	//latency to test deadreck
+	latency = 200.95; //simulating latency
+	newPosition = sf::Vector2f(0.0f,0.0f);
 
 	goingRight = true;
 }
@@ -48,8 +53,16 @@ void Ball::Update(float elapsedTime)
 		goingRight = true;
 	else
 		goingRight = false;
+	
+	//old Position
 	position += velocity * elapsedTime;
-	pSprite.setPosition(position.x, position.y);
+	//pSprite.setPosition(position.x, position.y);
+	//deadreck takes in elapsed velocity with latency and uses it on  old_Position
+	ballDeadReck(velocity*elapsedTime, position, latency);
+	pSprite.setPosition(newPosition.x, newPosition.y);
+
+
+
 }
 
 void Ball::Draw(sf::RenderWindow* w)
@@ -71,6 +84,36 @@ void Ball::CheckBounds()
 	{
 		velocity.y *= -1.0f;
 	}
+}
+
+void Ball::ballDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Position, double latency)
+{
+	//takes in the old position and merges it with the velocity and latency
+	newPosition = old_Position + deadReckVelocity*float(latency);
+
+	//newDirection = 
+
+	/*//Dead reck code
+
+	//Time based on system
+	time_t now = time(0);
+	struct tm * ptm;
+
+	//convert to utc
+	time(&now);
+	ptm = gmtime(&now);
+
+	//utc hour and minutes
+	int t1Hour = (ptm->tm_hour+UTC)%24;
+	int t1Minutes = (ptm->tm_min);
+	//?? need different time for this part
+	int t4Hour = (ptm->tm_hour+UTC)%24;
+	int t4Minutes = (ptm->tm_min);
+	
+	
+	//does latency
+	int latency = ((t4Hour - t1Hour) + (t4Minutes - t1Minutes))/2;
+	newPosition = position;// + //(deadReckVelocity * (latency));*/
 }
 
 //Function that makes a new Vector2f in a random direction that is normalized

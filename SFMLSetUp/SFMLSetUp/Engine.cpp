@@ -7,7 +7,7 @@ Engine::Engine()
 	wasHit(false),
 	startGame(true)
 {
-	window = new sf::RenderWindow(sf::VideoMode(1000, 550), "SFML works!");
+	window = new sf::RenderWindow(sf::VideoMode(1000, 550), "PokePong!");
 
 	player1 = new Player(1, sf::Vector2f(10.0f, 0.0f), sf::Keyboard::W, sf::Keyboard::S);
 	player2 = new Player(2, sf::Vector2f(970.0f, 0.0f), sf::Keyboard::Up, sf::Keyboard::Down);
