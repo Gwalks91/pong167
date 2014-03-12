@@ -33,7 +33,7 @@ Engine::Engine()
 		client->setMutex(clientMutex);
 		startGame = false;
 
-		clientThread = new sf::Thread(clientUpdateThread);
+		clientThread = new sf::Thread(&clientUpdateThread);
 		clientThread->launch();
 	}
 }
