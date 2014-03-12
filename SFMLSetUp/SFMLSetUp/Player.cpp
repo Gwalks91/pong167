@@ -8,7 +8,16 @@ Player::Player(int pID, sf::Vector2f paddlePos, sf::Keyboard::Key up, sf::Keyboa
 	moveDown(down),
 	score(0)
 {
-	p = new Paddle(paddlePos, 600.0f, LoadTexture("paddle.png"));
+	//Set the paddles to be the right facing one.
+	if(playerID == 1)
+	{
+		p = new Paddle(false, paddlePos, 600.0f, LoadTexture("paddle1.png"));
+	}
+	else
+	{
+		p = new Paddle(false, paddlePos, 600.0f, LoadTexture("paddle2.png"));
+	}
+
 }
 
 Player::~Player()

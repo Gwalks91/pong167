@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Ball.h"
 #include "Score.h"
+#include "Client.h"
 #include <SFML/Graphics.hpp>
 
 class Engine
@@ -13,8 +14,6 @@ class Engine
 public:
 	Engine();
 	~Engine();
-	void StartGame();
-	void EndGame(int playerID);
 	void Update();
 	void Draw();
 	sf::RenderWindow* window;
@@ -29,7 +28,11 @@ private:
 	Score s;
 	sf::Texture backGround;
 	sf::Sprite backgroundSprite;
+	sf::Texture winScreen;
+	sf::Sprite winScreenSprite;
 	bool startGame;
+	int clientNumber;
+	Client client;
 };
 
 #endif
