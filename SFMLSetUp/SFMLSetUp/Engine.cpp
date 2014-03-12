@@ -33,7 +33,7 @@ Engine::Engine()
 		client->setMutex(clientMutex);
 		startGame = false;
 
-		clientThread = new sf::Thread(&clientUpdateThread);
+		clientThread = new sf::Thread(&Engine::clientUpdateThread, this);
 		clientThread->launch();
 	}
 }
@@ -262,17 +262,17 @@ void Engine::clientUpdateThread()
 
 				if(atoi(subString.c_str()) == 1)
 				{
-					ball->ballDeadReck(sf::Vector2f(xPosition, yPosition), sf::Vector2f(xVelocity, yVelocity), 0);
+					ball->ballDeadReck(sf::Vector2f(xVelocity, yVelocity), sf::Vector2f(xPosition, yPosition), 0);
 				}
 				else
 				{
 					if(clientNumber == 1)
 					{
-						player2->deadReck(sf::Vector2f(xPosition, yPosition), sf::Vector2f(xVelocity, yVelocity), 0);
+						player2->deadReck(sf::Vector2f(0, yVelocity), sf::Vector2f(0, yPosition), 0);
 					}
 					else
 					{
-						player1->deadReck(sf::Vector2f(xPosition, yPosition), sf::Vector2f(xVelocity, yVelocity), 0);
+						player1->deadReck(sf::Vector2f(0, yVelocity), sf::Vector2f(0, yPosition), 0);
 					}
 				}
 			}
