@@ -3,12 +3,12 @@
 Client::Client()
 {
 	connected = false;
-	clientThread == nullptr;
+	clientThread = nullptr;
 }
 
 Client::Client(const std::string& ipAddress, const int& port)
 {
-	clientThread == nullptr;
+	clientThread = nullptr;
 	socket = new sf::TcpSocket;
 	sf::Socket::Status status = socket->connect(ipAddress, port);
 	selector.add(*socket);
