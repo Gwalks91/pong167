@@ -30,6 +30,8 @@ public:
 	sf::Packet getTopPacket();
 	inline bool isPacketQueueEmpty()
 	{ return clientPacketQueue.empty(); }
+	bool isConnected()
+	{ return connected; }
 private:
 	//The actual socket that can send and receive packets.
 	sf::TcpSocket* socket;
