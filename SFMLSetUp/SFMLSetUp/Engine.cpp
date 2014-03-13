@@ -299,7 +299,7 @@ void Engine::clientSendThreadUpdate()
 		double secondsSinceStart = difftime( time(0), start);
 		start = time(0);
 		//If we are online we want to send our information to the Server.
-		if(NETWORKED && secondsSinceStart >= 1)
+		if(NETWORKED && secondsSinceStart >= .25)
 		{
 			std::stringstream paddleString;
 			if(clientNumber == 1)
