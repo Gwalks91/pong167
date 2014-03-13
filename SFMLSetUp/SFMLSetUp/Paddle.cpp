@@ -82,7 +82,7 @@ void Paddle::Update(float elapsedTime)
 			//Move towards the new position set by the server.
 			position += newPosition * paddleSpeed * elapsedTime;
 			//Stop moving when we are close enough to the server.
-			if(DistanceBetweenVectors(position, newPosition) == .0001 || !CheckBoundsPosition(position))
+			if(DistanceBetweenVectors(position, newPosition) <= 3 || !CheckBoundsPosition(position))
 			{
 				position = newPosition;
 				velocity = sf::Vector2f(0.0f, 0.0f);
@@ -90,10 +90,6 @@ void Paddle::Update(float elapsedTime)
 			}
 
 			pSprite.setPosition(position.x, position.y);
-		}
-		else
-		{
-			position = position;
 		}
 	}
 }
