@@ -102,14 +102,16 @@ void Ball::CheckBounds()
 
 void Ball::ballDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Position, double latency)
 {
-	//paddle deadreck
-	//Set the location from the server to be the 
-	destination = old_Position;
-	newPosition = sf::Vector2f(old_Position.x - position.x, old_Position.y - position.y);
+	////paddle deadreck
+	////Set the location from the server to be the 
+	//destination = old_Position;
+	//newPosition = sf::Vector2f(old_Position.x - position.x, old_Position.y - position.y);
 
-	//Set the velocity to catch up with the lag. TO-DO
-	deadVelocity = DistanceBetweenVectors(old_Position, position)/(DistanceBetweenVectors(old_Position, position)/ballSpeed);
-	doneFollowingServer = false;
+	////Set the velocity to catch up with the lag. TO-DO
+	//deadVelocity = DistanceBetweenVectors(old_Position, position)/(DistanceBetweenVectors(old_Position, position)/ballSpeed);
+	//doneFollowingServer = false;
+	position = old_Position;
+	pSprite.setPosition(position);
 }
 
 //Function that makes a new Vector2f in a random direction that is normalized
