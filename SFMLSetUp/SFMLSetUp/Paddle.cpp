@@ -52,7 +52,6 @@ sf::FloatRect Paddle::GetSpriteBoundingBox()
 //Going to have to check the collider 
 void Paddle::Update(float elapsedTime)
 {
-	oldPosition = position;
 	if(!serverControl)
 	{
 		//Set the position.
@@ -113,12 +112,15 @@ void Paddle::paddleDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Posi
 {
 	//Set new position as a unit vector that will allow us to path towards it in the
 	//update loop.
-	newPosition = sf::Vector2f(position.x, old_Position.y - position.y);
+	//newPosition = sf::Vector2f(position.x, old_Position.y - position.y);
 
 	//Set the velocity to catch up with the lag. TO-DO
-	velocity = sf::Vector2f(deadReckVelocity.x, deadReckVelocity.y);
+	/*velocity = sf::Vector2f(deadReckVelocity.x, deadReckVelocity.y);
 
-	doneFollowingServer = false;
+	doneFollowingServer = false;*/
+
+	position = old_Position;
+	pSprite.setPosition(position);
 }
 
 bool Paddle::CheckBoundsPosition(sf::Vector2f pos)
@@ -136,6 +138,7 @@ std::string Paddle::getPositionAndVelocityString()
 	{
 		std::stringstream positionAndVelocity;
 		positionAndVelocity << position.x << " " << position.y << " " << velocity.x << " " << velocity.y;
+		oldPosition = position;
 		return positionAndVelocity.str();
 	}
 	return "";

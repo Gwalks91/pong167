@@ -74,6 +74,7 @@ void Engine::Update()
 
 		player1->Update(elapsedTime);
 		player2->Update(elapsedTime);
+		
 		ball->Update(elapsedTime);
 
 		s.Update(elapsedTime);
@@ -298,7 +299,7 @@ void Engine::clientSendThreadUpdate()
 	{
 		double secondsSinceStart = difftime( time(0), start);
 		//If we are online we want to send our information to the Server.
-		if(NETWORKED && secondsSinceStart >= .25)
+		if(NETWORKED && secondsSinceStart >= 0.0333)
 		{
 			start = time(0);
 			std::stringstream paddleString;
