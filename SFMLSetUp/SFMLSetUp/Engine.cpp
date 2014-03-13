@@ -297,10 +297,10 @@ void Engine::clientSendThreadUpdate()
 	while(client->isConnected())
 	{
 		double secondsSinceStart = difftime( time(0), start);
-		start = time(0);
 		//If we are online we want to send our information to the Server.
 		if(NETWORKED && secondsSinceStart >= .25)
 		{
+			start = time(0);
 			std::stringstream paddleString;
 			if(clientNumber == 1)
 			{
