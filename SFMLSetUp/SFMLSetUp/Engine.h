@@ -25,6 +25,7 @@ private:
 	void HandleInput();
 	void CheckCollision();
 	void clientUpdateThread();
+	void clientSendThreadUpdate();
 	sf::Clock deltaClock;
 	Score s;
 	sf::Texture backGround;
@@ -33,9 +34,11 @@ private:
 	sf::Sprite winScreenSprite;
 	bool startGame;
 	int clientNumber;
+	time_t start;
 	Client* client;
 	sf::Mutex* clientMutex;
 	sf::Thread* clientThread;
+	sf::Thread* clientSendThread;
 };
 
 #endif

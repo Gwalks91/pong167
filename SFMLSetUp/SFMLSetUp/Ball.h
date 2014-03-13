@@ -32,8 +32,9 @@ private:
 	sf::Sprite pSprite;
 	sf::Vector2f position;
 	sf::Vector2f velocity;
-	
+	float deadVelocity;
 	sf::Vector2f newPosition;
+	sf::Vector2f destination;
 };
 
 #endif

@@ -51,31 +51,31 @@ void Ball::Update(float elapsedTime)
 {
 	if(doneFollowingServer)
 	{
-		CheckBounds();
-		if(velocity.x >= 0)
-			goingRight = true;
-		else
-			goingRight = false;
-	
 		//old Position
 		position += velocity * elapsedTime;
 		pSprite.setPosition(position.x, position.y);
-
-		if(position.x < 0 || position.x > SCREEN_WIDTH)
-		{
-			ResetBall();
-		}
 	}
-	if(NETWORKED && !doneFollowingServer)
+	if(!doneFollowingServer)
 	{
-		position +=  position * (newPosition.x * velocity.y - newPosition.y * velocity.x) * elapsedTime;
-		if(DistanceBetweenVectors(position, newPosition) == .0001)
+		position +=  newPosition * deadVelocity * elapsedTime;
+		if(DistanceBetweenVectors(position, destination) <= 10)
 		{
-			position = newPosition;
-			velocity = sf::Vector2f(0.0f, 0.0f);
+			position = destination;
+			velocity = sf::Vector2f(ballSpeed, ballSpeed);
 			doneFollowingServer = true;
 		}
 		pSprite.setPosition(position.x, position.y);
+	}
+
+	CheckBounds();
+	if(velocity.x >= 0)
+		goingRight = true;
+	else
+		goingRight = false;
+	
+	if(position.x < 0 || position.x > SCREEN_WIDTH)
+	{
+		ResetBall();
 	}
 }
 
@@ -104,11 +104,11 @@ void Ball::ballDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Position
 {
 	//paddle deadreck
 	//Set the location from the server to be the 
+	destination = old_Position;
 	newPosition = sf::Vector2f(old_Position.x - position.x, old_Position.y - position.y);
-	NormalizeVector(newPosition);
 
 	//Set the velocity to catch up with the lag. TO-DO
-	velocity = sf::Vector2f(deadReckVelocity.x, deadReckVelocity.y);
+	deadVelocity = DistanceBetweenVectors(old_Position, position)/(DistanceBetweenVectors(old_Position, position)/ballSpeed);
 	doneFollowingServer = false;
 }
 

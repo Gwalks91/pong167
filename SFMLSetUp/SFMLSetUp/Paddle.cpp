@@ -13,6 +13,7 @@ Paddle::Paddle(bool server, sf::Vector2f v, float speed, sf::Texture t)
 	pTexture = t;
 	pSprite.setTexture(pTexture);
 	pSprite.setPosition(position);
+	oldPosition = position;
 	buttonHeld = false;
 	serverControl = server;
 	doneFollowingServer = true;
@@ -51,7 +52,8 @@ sf::FloatRect Paddle::GetSpriteBoundingBox()
 //Going to have to check the collider 
 void Paddle::Update(float elapsedTime)
 {
-	if(!NETWORKED)
+	oldPosition = position;
+	if(!serverControl)
 	{
 		//Set the position.
 		position += velocity * elapsedTime; //original position
@@ -78,9 +80,9 @@ void Paddle::Update(float elapsedTime)
 		if(!doneFollowingServer)
 		{
 			//Move towards the new position set by the server.
-			position += position * (newPosition.x * velocity.y - newPosition.y * velocity.x) * elapsedTime;
+			position += newPosition * paddleSpeed * elapsedTime;
 			//Stop moving when we are close enough to the server.
-			if(DistanceBetweenVectors(position, newPosition) == .0001)
+			if(DistanceBetweenVectors(position, newPosition) == .0001 || !CheckBoundsPosition(position))
 			{
 				position = newPosition;
 				velocity = sf::Vector2f(0.0f, 0.0f);
@@ -115,11 +117,10 @@ void Paddle::paddleDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Posi
 {
 	//Set new position as a unit vector that will allow us to path towards it in the
 	//update loop.
-	newPosition = sf::Vector2f(old_Position.x - position.x, old_Position.y - position.y);
-	NormalizeVector(newPosition);
+	newPosition = sf::Vector2f(position.x, old_Position.y - position.y);
 
 	//Set the velocity to catch up with the lag. TO-DO
-	velocity = sf::Vector2f(0, deadReckVelocity.y);
+	velocity = sf::Vector2f(deadReckVelocity.x, deadReckVelocity.y);
 
 	doneFollowingServer = false;
 }
@@ -135,7 +136,11 @@ bool Paddle::CheckBoundsPosition(sf::Vector2f pos)
 
 std::string Paddle::getPositionAndVelocityString()
 {
-	std::stringstream positionAndVelocity;
-	positionAndVelocity << position.x << " " << position.y << " " << velocity.x << " " << velocity.y;
-	return positionAndVelocity.str();
+	if(DistanceBetweenVectors(oldPosition, position) >= 10)
+	{
+		std::stringstream positionAndVelocity;
+		positionAndVelocity << position.x << " " << position.y << " " << velocity.x << " " << velocity.y;
+		return positionAndVelocity.str();
+	}
+	return "";
 }

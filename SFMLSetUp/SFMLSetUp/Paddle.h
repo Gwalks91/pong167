@@ -30,6 +30,7 @@ private:
 	sf::Texture pTexture;
 	sf::Sprite pSprite;
 	sf::Vector2f position;
+	sf::Vector2f oldPosition;
 	sf::Vector2f velocity;
 	float paddleSpeed;
 	float currentSpeed;
