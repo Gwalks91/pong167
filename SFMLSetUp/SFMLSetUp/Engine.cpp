@@ -22,6 +22,8 @@ Engine::Engine()
 	clientThread = nullptr;
 	clientSendThread = nullptr;
 
+	timeSinceLastSend = 0;
+
 	start = time(0);
 
 	if(!NETWORKED)
@@ -32,7 +34,7 @@ Engine::Engine()
 	{
 		//Try to connect to the server.
 		clientMutex = new sf::Mutex;
-		client = new Client("169.234.39.37", 4455);
+		client = new Client("127.0.0.1", 4455);
 		client->setMutex(clientMutex);
 		startGame = false;
 
@@ -81,7 +83,7 @@ void Engine::Update()
 
 		if(s.winnerIs() != 0)
 		{
-			//startGame = false;
+			startGame = false;
 		}
 		HandleInput();
 	}
@@ -96,20 +98,20 @@ void Engine::Draw()
 	player2->Draw(window);
 	ball->Draw(window);
 	s.Draw(window);
-	//if(s.winnerIs() == 1)
-	//{
-	//	winScreen = LoadTexture("PlayerOneWin.png");
-	//	winScreenSprite.setTexture(winScreen);
-	//	winScreenSprite.setScale(SCREEN_WIDTH/backgroundSprite.getLocalBounds().width , SCREEN_HEIGHT/backgroundSprite.getLocalBounds().height);
-	//	window->draw(winScreenSprite);
-	//}
-	//else if(s.winnerIs() == 2)
-	//{
-	//	winScreen = LoadTexture("PlayerTwoWin.png");
-	//	winScreenSprite.setTexture(winScreen);
-	//	winScreenSprite.setScale(SCREEN_WIDTH/backgroundSprite.getLocalBounds().width , SCREEN_HEIGHT/backgroundSprite.getLocalBounds().height);
-	//	window->draw(winScreenSprite);
-	//}
+	if(s.winnerIs() == 1)
+	{
+		winScreen = LoadTexture("PlayerOneWin.png");
+		winScreenSprite.setTexture(winScreen);
+		winScreenSprite.setScale(SCREEN_WIDTH/backgroundSprite.getLocalBounds().width , SCREEN_HEIGHT/backgroundSprite.getLocalBounds().height);
+		window->draw(winScreenSprite);
+	}
+	else if(s.winnerIs() == 2)
+	{
+		winScreen = LoadTexture("PlayerTwoWin.png");
+		winScreenSprite.setTexture(winScreen);
+		winScreenSprite.setScale(SCREEN_WIDTH/backgroundSprite.getLocalBounds().width , SCREEN_HEIGHT/backgroundSprite.getLocalBounds().height);
+		window->draw(winScreenSprite);
+	}
     window->display();
 }
 
@@ -142,12 +144,18 @@ void Engine::CheckCollision()
 {
 	if(ball->GetSpriteBoundingBox().intersects(player1->GetPaddle()->GetSpriteBoundingBox()) && ball->GetSpriteBoundingBox().left > player1->GetPaddle()->GetSpriteBoundingBox().left + player1->GetPaddle()->GetSpriteBoundingBox().width - 3 && !ball->GetDirection())
 	{
-		ball->ChangeBallDirection();
+		if(!NETWORKED || (NETWORKED && ball->finishedDeadReck()))
+		{
+			ball->ChangeBallDirection();
+		}
 	}
 		
 	if(ball->GetSpriteBoundingBox().intersects(player2->GetPaddle()->GetSpriteBoundingBox()) && ball->GetSpriteBoundingBox().left + ball->GetSpriteBoundingBox().width - 3 < player2->GetPaddle()->GetSpriteBoundingBox().left && ball->GetDirection())
 	{
-		ball->ChangeBallDirection();
+		if(!NETWORKED || (NETWORKED && ball->finishedDeadReck()))
+		{
+			ball->ChangeBallDirection();
+		}
 	}
 
 	if(ball->GetSpriteBoundingBox().left <= 3)
@@ -155,6 +163,9 @@ void Engine::CheckCollision()
 		if(!NETWORKED)
 		{
 			s.ChangeScore(2);
+		}
+		if(!NETWORKED || (NETWORKED && ball->finishedDeadReck()))
+		{
 			ball->ResetBall();
 		}
 	}
@@ -163,6 +174,9 @@ void Engine::CheckCollision()
 		if(!NETWORKED)
 		{
 			s.ChangeScore(1);
+		}
+		if(!NETWORKED || (NETWORKED && ball->finishedDeadReck()))
+		{
 			ball->ResetBall();
 		}
 	}
@@ -297,11 +311,13 @@ void Engine::clientSendThreadUpdate()
 {
 	while(client->isConnected())
 	{
-		double secondsSinceStart = difftime( time(0), start);
+		float elapsedTime = sendClock.getElapsedTime().asSeconds();
+		sendClock.restart();
+		timeSinceLastSend += elapsedTime;
 		//If we are online we want to send our information to the Server.
-		if(NETWORKED && secondsSinceStart >= 0.0333)
+		if(NETWORKED && timeSinceLastSend >= 0.0163333)
 		{
-			start = time(0);
+			timeSinceLastSend = 0;
 			std::stringstream paddleString;
 			if(clientNumber == 1)
 			{

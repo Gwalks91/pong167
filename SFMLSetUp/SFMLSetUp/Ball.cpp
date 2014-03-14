@@ -49,34 +49,35 @@ void Ball::ResetBall()
 
 void Ball::Update(float elapsedTime)
 {
-	//if(doneFollowingServer)
-	//{
-	//	//old Position
-	//	position += velocity * elapsedTime;
-	//	pSprite.setPosition(position.x, position.y);
-	//}
-	//if(!doneFollowingServer)
-	//{
-	//	position +=  newPosition * deadVelocity * elapsedTime;
-	//	if(DistanceBetweenVectors(position, destination) <= 10)
-	//	{
-	//		position = destination;
-	//		velocity = sf::Vector2f(ballSpeed, ballSpeed);
-	//		doneFollowingServer = true;
-	//	}
-	//	pSprite.setPosition(position.x, position.y);
-	//}
-
-	//CheckBounds();
-	//if(velocity.x >= 0)
-	//	goingRight = true;
-	//else
-	//	goingRight = false;
-	//
-	//if(position.x < 0 || position.x > SCREEN_WIDTH)
-	//{
-	//	ResetBall();
-	//}
+	if(doneFollowingServer)
+	{
+		//old Position
+		position += velocity * elapsedTime;
+		pSprite.setPosition(position.x, position.y);
+		
+		CheckBounds();
+		
+		if(velocity.x >= 0)
+			goingRight = true;
+		else
+			goingRight = false;
+	
+		if(position.x < 0 || position.x > SCREEN_WIDTH || position.y < -10 || position.y > SCREEN_HEIGHT + 10)
+		{
+			ResetBall();
+		}
+	}
+	if(!doneFollowingServer)
+	{
+		position += newPosition * deadVelocity * elapsedTime;
+		if(DistanceBetweenVectors(position, destination) <= 3)
+		{
+			position = destination;
+			velocity = sf::Vector2f(ballSpeed, ballSpeed);
+			doneFollowingServer = true;
+		}
+		pSprite.setPosition(position.x, position.y);
+	}
 }
 
 void Ball::Draw(sf::RenderWindow* w)
@@ -104,14 +105,13 @@ void Ball::ballDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Position
 {
 	////paddle deadreck
 	////Set the location from the server to be the 
-	//destination = old_Position;
-	//newPosition = sf::Vector2f(old_Position.x - position.x, old_Position.y - position.y);
+	destination = old_Position;
+	newPosition = old_Position - position;
+	newPosition = sf::Vector2f(newPosition.x/DistanceBetweenVectors(old_Position, position), newPosition.y/DistanceBetweenVectors(old_Position, position));
 
-	////Set the velocity to catch up with the lag. TO-DO
-	//deadVelocity = DistanceBetweenVectors(old_Position, position)/(DistanceBetweenVectors(old_Position, position)/ballSpeed);
-	//doneFollowingServer = false;
-	position = old_Position;
-	pSprite.setPosition(position);
+	//Set the velocity to catch up with the lag. TO-DO
+	deadVelocity = DistanceBetweenVectors(old_Position, position)/(DistanceBetweenVectors(old_Position, position)/(ballSpeed + latency));
+	doneFollowingServer = false;
 }
 
 //Function that makes a new Vector2f in a random direction that is normalized

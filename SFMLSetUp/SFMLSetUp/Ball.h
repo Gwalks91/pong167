@@ -21,6 +21,8 @@ public:
 	void ballDeadReck(sf::Vector2f position, sf::Vector2f velocity, double latency);
 	float getBallVelocity()
 	{ return velocity.y; }
+	inline bool finishedDeadReck()
+	{ return doneFollowingServer; }
 private:
 	sf::Vector2f MakeRandomVector();
 	void CheckBounds();

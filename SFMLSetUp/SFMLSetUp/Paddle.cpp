@@ -79,16 +79,13 @@ void Paddle::Update(float elapsedTime)
 		if(!doneFollowingServer)
 		{
 			//Move towards the new position set by the server.
-			position += newPosition * paddleSpeed * elapsedTime;
-			//Stop moving when we are close enough to the server.
-			if(DistanceBetweenVectors(position, newPosition) <= 3 || !CheckBoundsPosition(position))
+			position.y += newPosition.y * deadReckVel * elapsedTime;
+			if(DistanceBetweenVectors(position, destination) <= 3)
 			{
-				position = newPosition;
-				velocity = sf::Vector2f(0.0f, 0.0f);
+				position = destination;
 				doneFollowingServer = true;
 			}
-
-			pSprite.setPosition(position.x, position.y);
+			pSprite.setPosition(position);
 		}
 	}
 }
@@ -112,15 +109,14 @@ void Paddle::paddleDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Posi
 {
 	//Set new position as a unit vector that will allow us to path towards it in the
 	//update loop.
-	//newPosition = sf::Vector2f(position.x, old_Position.y - position.y);
+	destination = old_Position;
+	newPosition = old_Position - position;
+	newPosition = sf::Vector2f(newPosition.x/DistanceBetweenVectors(old_Position, position), newPosition.y/DistanceBetweenVectors(old_Position, position));
 
 	//Set the velocity to catch up with the lag. TO-DO
-	/*velocity = sf::Vector2f(deadReckVelocity.x, deadReckVelocity.y);
-
-	doneFollowingServer = false;*/
-
-	position = old_Position;
-	pSprite.setPosition(position);
+	deadReckVel = DistanceBetweenVectors(old_Position, position)/(DistanceBetweenVectors(old_Position, position)/(paddleSpeed + latency));
+	
+	doneFollowingServer = false;
 }
 
 bool Paddle::CheckBoundsPosition(sf::Vector2f pos)
@@ -134,7 +130,7 @@ bool Paddle::CheckBoundsPosition(sf::Vector2f pos)
 
 std::string Paddle::getPositionAndVelocityString()
 {
-	if(DistanceBetweenVectors(oldPosition, position) >= 10)
+	if(DistanceBetweenVectors(oldPosition, position) >= 1)
 	{
 		std::stringstream positionAndVelocity;
 		positionAndVelocity << position.x << " " << position.y << " " << velocity.x << " " << velocity.y;
