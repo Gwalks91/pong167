@@ -37,6 +37,8 @@ private:
 	float deadVelocity;
 	sf::Vector2f newPosition;
 	sf::Vector2f destination;
+	sf::Vector2f serverBall;
+	sf::Vector2f deadReckVec;
 };
 
 #endif

@@ -13,7 +13,7 @@ Ball::Ball(float speed, sf::Texture t)
 
 	//deadreck
 	newPosition = sf::Vector2f(0.0f,0.0f);
-
+	serverBall = position;
 	goingRight = true;
 
 	if(!NETWORKED)
@@ -67,15 +67,38 @@ void Ball::Update(float elapsedTime)
 			ResetBall();
 		}
 	}
-	if(!doneFollowingServer)
+	else if(!doneFollowingServer)
 	{
-		position += newPosition * deadVelocity * elapsedTime;
-		if(DistanceBetweenVectors(position, destination) <= 3)
+		newPosition = serverBall - position;
+		newPosition = sf::Vector2f(newPosition.x/DistanceBetweenVectors(serverBall, position), newPosition.y/DistanceBetweenVectors(serverBall, position));
+		serverBall += newPosition * deadVelocity * elapsedTime;
+		if(DistanceBetweenVectors(position, serverBall) >= 10)
+		{
+			position = serverBall;
+		}
+		else
+		{
+			position += velocity * elapsedTime;
+
+			CheckBounds();
+		
+			if(velocity.x >= 0)
+				goingRight = true;
+			else
+				goingRight = false;
+		}
+
+		if(DistanceBetweenVectors(position, destination) <= .1)
 		{
 			position = destination;
-			velocity = sf::Vector2f(ballSpeed, ballSpeed);
 			doneFollowingServer = true;
 		}
+
+		if(position.x < 0 || position.x > SCREEN_WIDTH || position.y < -10 || position.y > SCREEN_HEIGHT + 10)
+		{
+			ResetBall();
+		}
+
 		pSprite.setPosition(position.x, position.y);
 	}
 }
@@ -106,11 +129,14 @@ void Ball::ballDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Position
 	////paddle deadreck
 	////Set the location from the server to be the 
 	destination = old_Position;
+	serverBall = position;
+
 	newPosition = old_Position - position;
 	newPosition = sf::Vector2f(newPosition.x/DistanceBetweenVectors(old_Position, position), newPosition.y/DistanceBetweenVectors(old_Position, position));
 
 	//Set the velocity to catch up with the lag. TO-DO
 	deadVelocity = DistanceBetweenVectors(old_Position, position)/(DistanceBetweenVectors(old_Position, position)/(ballSpeed + latency));
+	deadReckVec = sf::Vector2f(deadReckVelocity.x, deadReckVelocity.y);
 	doneFollowingServer = false;
 }
 

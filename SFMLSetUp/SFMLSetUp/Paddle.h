@@ -35,10 +35,10 @@ private:
 	sf::Vector2f destination;
 	sf::Vector2f oldPosition;
 	sf::Vector2f velocity;
+	float distanceOfDead;
 	float deadReckVel;
 	float paddleSpeed;
 	float currentSpeed;
-
 	sf::Vector2f newPosition;
 
 	static const float max;

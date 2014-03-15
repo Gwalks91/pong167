@@ -1,13 +1,2 @@
 ﻿  Paddle.cpp
-c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\paddle.cpp(117): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-  Ball.cpp
-c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(6): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
-c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(9): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(9): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(46): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(46): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(113): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(120): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(120): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-  Generating Code...
   SFMLSetUp.vcxproj -> C:\Users\Handerson\Documents\pong167\pong167\SFMLSetUp\Debug\SFMLSetUp.exe

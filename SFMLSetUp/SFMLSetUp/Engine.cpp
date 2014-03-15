@@ -315,7 +315,7 @@ void Engine::clientSendThreadUpdate()
 		sendClock.restart();
 		timeSinceLastSend += elapsedTime;
 		//If we are online we want to send our information to the Server.
-		if(NETWORKED && timeSinceLastSend >= 0.0163333)
+		if(NETWORKED && timeSinceLastSend >= (1/60))
 		{
 			timeSinceLastSend = 0;
 			std::stringstream paddleString;
