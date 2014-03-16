@@ -23,8 +23,6 @@ Paddle::Paddle(bool server, sf::Vector2f v, float speed, sf::Texture t)
 
 	//Deadreck
 	newPosition = sf::Vector2f (0.0f,0.0f);
-
-	std::cout << "Starting" << std::endl;
 }
 
 Paddle::~Paddle()
@@ -86,18 +84,17 @@ void Paddle::Update(float elapsedTime)
 			//Slow the paddle down as it gets to the destination.
 			if(position.y > destination.y)
 			{
-				velocity = sf::Vector2f(0, -paddleSpeed);
+				velocity = sf::Vector2f(0, -paddleSpeed*(DistanceBetweenVectors(position, destination)/distanceOfDead));
 			}
 			else
 			{
-				velocity = sf::Vector2f(0, paddleSpeed);
+				velocity = sf::Vector2f(0, paddleSpeed*(DistanceBetweenVectors(position, destination)/distanceOfDead));
 			}
 
 			//Move towards the new position set by the server.
 			position += velocity * elapsedTime;
 			if(DistanceBetweenVectors(position, destination) <= 1 || !CheckBoundsPosition(position))
 			{
-				std::cout << "Setting Position to Destination." << std::endl;
 				position = destination;
 				doneFollowingServer = true;
 			}
@@ -126,6 +123,8 @@ void Paddle::paddleDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Posi
 	//Set new position as a unit vector that will allow us to path towards it in the
 	//update loop.
 	destination = old_Position;
+	
+	distanceOfDead = DistanceBetweenVectors(position, destination);
 
 	//Set the velocity to catch up with the lag. TO-DO
 	velocity = sf::Vector2f(0.0f, 0.0f);

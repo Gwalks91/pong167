@@ -1,2 +1,9 @@
-﻿  Paddle.cpp
+﻿  Ball.cpp
+c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(6): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(9): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(9): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(46): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(46): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(156): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(156): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
   SFMLSetUp.vcxproj -> C:\Users\Handerson\Documents\pong167\pong167\SFMLSetUp\Debug\SFMLSetUp.exe

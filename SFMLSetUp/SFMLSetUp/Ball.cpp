@@ -49,7 +49,7 @@ void Ball::ResetBall()
 
 void Ball::Update(float elapsedTime)
 {
-	if(doneFollowingServer)
+	if(!NETWORKED)
 	{
 		//old Position
 		position += velocity * elapsedTime;
@@ -67,31 +67,36 @@ void Ball::Update(float elapsedTime)
 			ResetBall();
 		}
 	}
-	else if(!doneFollowingServer)
+	else
 	{
-		newPosition = serverBall - position;
-		newPosition = sf::Vector2f(newPosition.x/DistanceBetweenVectors(serverBall, position), newPosition.y/DistanceBetweenVectors(serverBall, position));
-		serverBall += newPosition * deadVelocity * elapsedTime;
-		if(DistanceBetweenVectors(position, serverBall) >= 10)
+		////Move the client's copy of the server's ball.
+		//newPosition = destination - serverBall;
+		//newPosition = sf::Vector2f(newPosition.x/DistanceBetweenVectors(serverBall, destination), newPosition.y/DistanceBetweenVectors(serverBall, destination));
+		//serverBall += newPosition * deadVelocity * elapsedTime;
+		
+		
+		//Move the ball normally.
+		position += velocity * elapsedTime;
+		
+		//Bounds check the ball.
+		CheckBounds();
+
+		if(velocity.x >= 0)
+			goingRight = true;
+		else
+			goingRight = false;
+		
+
+		//if it gets off track then snap it to the client's copy of the server 's ball.
+		/*if(DistanceBetweenVectors(position, serverBall) >= 10)
 		{
 			position = serverBall;
-		}
-		else
-		{
-			position += velocity * elapsedTime;
+		}*/
 
-			CheckBounds();
-		
-			if(velocity.x >= 0)
-				goingRight = true;
-			else
-				goingRight = false;
-		}
-
+		//Snap the ball to position if it is close enough.
 		if(DistanceBetweenVectors(position, destination) <= .1)
 		{
 			position = destination;
-			doneFollowingServer = true;
 		}
 
 		if(position.x < 0 || position.x > SCREEN_WIDTH || position.y < -10 || position.y > SCREEN_HEIGHT + 10)
@@ -99,6 +104,7 @@ void Ball::Update(float elapsedTime)
 			ResetBall();
 		}
 
+		//Set the sprite position.
 		pSprite.setPosition(position.x, position.y);
 	}
 }
@@ -128,16 +134,18 @@ void Ball::ballDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Position
 {
 	////paddle deadreck
 	////Set the location from the server to be the 
-	destination = old_Position;
+	/*destination = old_Position;
 	serverBall = position;
 
 	newPosition = old_Position - position;
 	newPosition = sf::Vector2f(newPosition.x/DistanceBetweenVectors(old_Position, position), newPosition.y/DistanceBetweenVectors(old_Position, position));
-
+*/
 	//Set the velocity to catch up with the lag. TO-DO
-	deadVelocity = DistanceBetweenVectors(old_Position, position)/(DistanceBetweenVectors(old_Position, position)/(ballSpeed + latency));
-	deadReckVec = sf::Vector2f(deadReckVelocity.x, deadReckVelocity.y);
+	/*deadVelocity = DistanceBetweenVectors(old_Position, position)/(DistanceBetweenVectors(old_Position, position)/(ballSpeed + latency));
+	deadReckVec = sf::Vector2f(deadReckVelocity.x, deadReckVelocity.y);*/
 	doneFollowingServer = false;
+
+	velocity = sf::Vector2f((deadReckVelocity.x/ballSpeed)*ballSpeed, (deadReckVelocity.y/ballSpeed)*ballSpeed);
 }
 
 //Function that makes a new Vector2f in a random direction that is normalized

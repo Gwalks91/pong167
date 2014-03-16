@@ -3,6 +3,7 @@
 
 #include <time.h>
 #include <sstream>
+#include <istream>
 
 Engine::Engine()
 	:s(),
@@ -144,18 +145,12 @@ void Engine::CheckCollision()
 {
 	if(ball->GetSpriteBoundingBox().intersects(player1->GetPaddle()->GetSpriteBoundingBox()) && ball->GetSpriteBoundingBox().left > player1->GetPaddle()->GetSpriteBoundingBox().left + player1->GetPaddle()->GetSpriteBoundingBox().width - 3 && !ball->GetDirection())
 	{
-		if(!NETWORKED || (NETWORKED && ball->finishedDeadReck()))
-		{
-			ball->ChangeBallDirection();
-		}
+		ball->ChangeBallDirection();
 	}
 		
 	if(ball->GetSpriteBoundingBox().intersects(player2->GetPaddle()->GetSpriteBoundingBox()) && ball->GetSpriteBoundingBox().left + ball->GetSpriteBoundingBox().width - 3 < player2->GetPaddle()->GetSpriteBoundingBox().left && ball->GetDirection())
 	{
-		if(!NETWORKED || (NETWORKED && ball->finishedDeadReck()))
-		{
-			ball->ChangeBallDirection();
-		}
+		ball->ChangeBallDirection();
 	}
 
 	if(ball->GetSpriteBoundingBox().left <= 3)
@@ -163,9 +158,6 @@ void Engine::CheckCollision()
 		if(!NETWORKED)
 		{
 			s.ChangeScore(2);
-		}
-		if(!NETWORKED || (NETWORKED && ball->finishedDeadReck()))
-		{
 			ball->ResetBall();
 		}
 	}
@@ -174,9 +166,6 @@ void Engine::CheckCollision()
 		if(!NETWORKED)
 		{
 			s.ChangeScore(1);
-		}
-		if(!NETWORKED || (NETWORKED && ball->finishedDeadReck()))
-		{
 			ball->ResetBall();
 		}
 	}
