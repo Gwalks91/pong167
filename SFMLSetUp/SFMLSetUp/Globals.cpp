@@ -53,3 +53,12 @@ float DistanceBetweenVectors(sf::Vector2f &v1, sf::Vector2f &v2)
 	float final = std::sqrt(xPart + yPart);
 	return final;
 }
+
+float AngleBetweenVectors(sf::Vector2f &v1, sf::Vector2f &v2)
+{
+	float dot = v1.x * v2.x + v1.y * v2.y;
+	float v1Value = sqrt(v1.x * v1.x + v1.y + v1.y);
+	float v2Value = sqrt(v2.x * v2.x + v2.y + v2.y);
+	float angle = acos(dot/(v1Value * v2Value)) * (180/3.14);
+	return angle;
+}

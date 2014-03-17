@@ -143,12 +143,12 @@ void Engine::HandleInput()
 
 void Engine::CheckCollision()
 {
-	if(ball->GetSpriteBoundingBox().intersects(player1->GetPaddle()->GetSpriteBoundingBox()) && ball->GetSpriteBoundingBox().left > player1->GetPaddle()->GetSpriteBoundingBox().left + player1->GetPaddle()->GetSpriteBoundingBox().width - 3 && !ball->GetDirection())
+	if(ball->GetSpriteBoundingBox().intersects(player1->GetPaddle()->GetSpriteBoundingBox()) && !ball->GetDirection())
 	{
 		ball->ChangeBallDirection();
 	}
 		
-	if(ball->GetSpriteBoundingBox().intersects(player2->GetPaddle()->GetSpriteBoundingBox()) && ball->GetSpriteBoundingBox().left + ball->GetSpriteBoundingBox().width - 3 < player2->GetPaddle()->GetSpriteBoundingBox().left && ball->GetDirection())
+	if(ball->GetSpriteBoundingBox().intersects(player2->GetPaddle()->GetSpriteBoundingBox()) && ball->GetDirection())
 	{
 		ball->ChangeBallDirection();
 	}
@@ -258,19 +258,29 @@ void Engine::clientUpdateThread()
 					subString = stringReceived.substr(currentPos, posOfNextSpace);
 					float yVelocity = std::stof(subString.c_str());
 
+					currentPos = posOfNextSpace;
+					posOfNextSpace = stringReceived.find(" ", currentPos + 1);
+					subString = stringReceived.substr(currentPos, posOfNextSpace);
+					std::istringstream stream(subString);
+					time_t serverSentTime;
+					stream >> serverSentTime;
+					
+					std::time_t rawtime;
+					std::time(&rawtime);
+					
 					if(functionToDo == 1)
 					{
-						ball->ballDeadReck(sf::Vector2f(xVelocity, yVelocity), sf::Vector2f(xPosition, yPosition), 0);
+						ball->ballDeadReck(sf::Vector2f(xVelocity, yVelocity), sf::Vector2f(xPosition, yPosition), rawtime - serverSentTime);
 					}
 					else if(functionToDo == 2)
 					{
 						if(clientNumber == 1)
 						{
-							player2->deadReck(sf::Vector2f(xVelocity, yVelocity), sf::Vector2f(xPosition, yPosition), 0);
+							player2->deadReck(sf::Vector2f(xVelocity, yVelocity), sf::Vector2f(xPosition, yPosition), rawtime - serverSentTime);
 						}
 						else if(clientNumber == 2)
 						{
-							player1->deadReck(sf::Vector2f(xVelocity, yVelocity), sf::Vector2f(xPosition, yPosition), 0);
+							player1->deadReck(sf::Vector2f(xVelocity, yVelocity), sf::Vector2f(xPosition, yPosition), rawtime - serverSentTime);
 						}
 					}
 				}

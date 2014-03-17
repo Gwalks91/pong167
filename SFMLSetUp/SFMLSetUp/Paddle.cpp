@@ -127,7 +127,7 @@ void Paddle::paddleDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Posi
 	distanceOfDead = DistanceBetweenVectors(position, destination);
 
 	//Set the velocity to catch up with the lag. TO-DO
-	velocity = sf::Vector2f(0.0f, 0.0f);
+	velocity = sf::Vector2f(0.0f, DistanceBetweenVectors(destination, position)/(abs((DistanceBetweenVectors(destination, position)/paddleSpeed) - latency)));
 	
 	doneFollowingServer = false;
 }

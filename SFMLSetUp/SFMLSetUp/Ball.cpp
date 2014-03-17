@@ -69,15 +69,25 @@ void Ball::Update(float elapsedTime)
 	}
 	else
 	{
-		////Move the client's copy of the server's ball.
-		//newPosition = destination - serverBall;
-		//newPosition = sf::Vector2f(newPosition.x/DistanceBetweenVectors(serverBall, destination), newPosition.y/DistanceBetweenVectors(serverBall, destination));
-		//serverBall += newPosition * deadVelocity * elapsedTime;
-		
+		//Move the client's copy of the server's ball.
+		newPosition = destination - serverBall;
+		newPosition = sf::Vector2f(newPosition.x/DistanceBetweenVectors(serverBall, destination), newPosition.y/DistanceBetweenVectors(serverBall, destination));
+		serverBall += newPosition * ballSpeed * elapsedTime;
 		
 		//Move the ball normally.
 		position += velocity * elapsedTime;
 		
+		//if it gets off track then snap it to the client's copy of the server 's ball.
+		if(AngleBetweenVectors(newPosition, position) >= 15 && 
+			!((position.x > 5 && position.x < SCREEN_WIDTH - 5) || (position.y > 5 && position.y < SCREEN_HEIGHT - GetSpriteBoundingBox().top - 5)))
+		{
+			sf::Vector2f serverDirectionVector;
+			serverDirectionVector = serverBall - position;
+			serverDirectionVector = sf::Vector2f(serverDirectionVector.x/DistanceBetweenVectors(serverBall, position), serverDirectionVector.y/DistanceBetweenVectors(serverBall, position));
+
+			position += serverDirectionVector * ballSpeed * elapsedTime;
+		}
+
 		//Bounds check the ball.
 		CheckBounds();
 
@@ -85,19 +95,6 @@ void Ball::Update(float elapsedTime)
 			goingRight = true;
 		else
 			goingRight = false;
-		
-
-		//if it gets off track then snap it to the client's copy of the server 's ball.
-		/*if(DistanceBetweenVectors(position, serverBall) >= 10)
-		{
-			position = serverBall;
-		}*/
-
-		//Snap the ball to position if it is close enough.
-		if(DistanceBetweenVectors(position, destination) <= .1)
-		{
-			position = destination;
-		}
 
 		if(position.x < 0 || position.x > SCREEN_WIDTH || position.y < -10 || position.y > SCREEN_HEIGHT + 10)
 		{
@@ -132,20 +129,21 @@ void Ball::CheckBounds()
 
 void Ball::ballDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Position, double latency)
 {
-	////paddle deadreck
-	////Set the location from the server to be the 
-	/*destination = old_Position;
+	//paddle deadreck
+	//Set the location from the server to be the start of the client's copy og ther server's ball. 
+	destination = old_Position;
 	serverBall = position;
 
-	newPosition = old_Position - position;
-	newPosition = sf::Vector2f(newPosition.x/DistanceBetweenVectors(old_Position, position), newPosition.y/DistanceBetweenVectors(old_Position, position));
-*/
-	//Set the velocity to catch up with the lag. TO-DO
-	/*deadVelocity = DistanceBetweenVectors(old_Position, position)/(DistanceBetweenVectors(old_Position, position)/(ballSpeed + latency));
-	deadReckVec = sf::Vector2f(deadReckVelocity.x, deadReckVelocity.y);*/
-	doneFollowingServer = false;
+	//Create the unti verctor that points to the location of the server's ball.
+	newPosition = old_Position - serverBall;
+	//Normalize.
+	newPosition = sf::Vector2f(newPosition.x/DistanceBetweenVectors(old_Position, serverBall), newPosition.y/DistanceBetweenVectors(old_Position, serverBall));
 
-	velocity = sf::Vector2f((deadReckVelocity.x/ballSpeed)*ballSpeed, (deadReckVelocity.y/ballSpeed)*ballSpeed);
+	//Set the velocity to catch up with the lag. TO-DO
+	deadVelocity = DistanceBetweenVectors(old_Position, position)/(abs((DistanceBetweenVectors(old_Position, position)/ballSpeed) - latency));
+	deadReckVec = sf::Vector2f(deadReckVelocity.x, deadReckVelocity.y);
+	velocity = sf::Vector2f(deadReckVelocity.x, deadReckVelocity.y);
+	doneFollowingServer = false;
 }
 
 //Function that makes a new Vector2f in a random direction that is normalized
