@@ -1,10 +1,5 @@
-﻿  Ball.cpp
-c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(6): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
-c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(9): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(9): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(46): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(46): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(143): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(152): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\ball.cpp(152): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+﻿  Engine.cpp
+c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\engine.cpp(279): warning C4244: 'argument' : conversion from 'time_t' to 'double', possible loss of data
+c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\engine.cpp(285): warning C4244: 'argument' : conversion from 'time_t' to 'double', possible loss of data
+c:\users\handerson\documents\pong167\pong167\sfmlsetup\sfmlsetup\engine.cpp(289): warning C4244: 'argument' : conversion from 'time_t' to 'double', possible loss of data
   SFMLSetUp.vcxproj -> C:\Users\Handerson\Documents\pong167\pong167\SFMLSetUp\Debug\SFMLSetUp.exe

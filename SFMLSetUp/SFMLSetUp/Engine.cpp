@@ -88,6 +88,10 @@ void Engine::Update()
 		}
 		HandleInput();
 	}
+	else
+	{
+		deltaClock.restart();
+	}
 }
 	
 void Engine::Draw()
@@ -143,31 +147,33 @@ void Engine::HandleInput()
 
 void Engine::CheckCollision()
 {
-	if(ball->GetSpriteBoundingBox().intersects(player1->GetPaddle()->GetSpriteBoundingBox()) && !ball->GetDirection())
+	if(ball->GetSpriteBoundingBox().intersects(player1->GetPaddle()->GetSpriteBoundingBox()) && ball->GetSpriteBoundingBox().left > player1->GetPaddle()->GetSpriteBoundingBox().left + player1->GetPaddle()->GetSpriteBoundingBox().width - 3 && !ball->GetDirection())
 	{
 		ball->ChangeBallDirection();
 	}
 		
-	if(ball->GetSpriteBoundingBox().intersects(player2->GetPaddle()->GetSpriteBoundingBox()) && ball->GetDirection())
+	if(ball->GetSpriteBoundingBox().intersects(player2->GetPaddle()->GetSpriteBoundingBox()) && ball->GetSpriteBoundingBox().left + ball->GetSpriteBoundingBox().width < player2->GetPaddle()->GetSpriteBoundingBox().left + 3 && ball->GetDirection())
 	{
 		ball->ChangeBallDirection();
 	}
 
-	if(ball->GetSpriteBoundingBox().left <= 3)
+	if(ball->GetSpriteBoundingBox().left <= 3 && !ball->GetDirection())
 	{
 		if(!NETWORKED)
 		{
 			s.ChangeScore(2);
-			ball->ResetBall();
 		}
+
+		ball->ResetBall();
 	}
-	if(ball->GetSpriteBoundingBox().left + ball->GetSpriteBoundingBox().width >= SCREEN_WIDTH && ball->GetSpriteBoundingBox().left + ball->GetSpriteBoundingBox().width < SCREEN_WIDTH + 10)
+	if(ball->GetSpriteBoundingBox().left + ball->GetSpriteBoundingBox().width >= SCREEN_WIDTH && ball->GetSpriteBoundingBox().left + ball->GetSpriteBoundingBox().width < SCREEN_WIDTH + 10 && ball->GetDirection())
 	{
 		if(!NETWORKED)
 		{
 			s.ChangeScore(1);
-			ball->ResetBall();
 		}
+
+		ball->ResetBall();
 	}
 
 }
@@ -220,7 +226,7 @@ void Engine::clientUpdateThread()
 					{
 						player1->setAsServer();
 					}
-
+					deltaClock.restart();
 					//Start the main update loop and start message sending and recieving.
 				}
 				else if(atoi(subString.c_str()) == 1 || atoi(subString.c_str()) == 2)

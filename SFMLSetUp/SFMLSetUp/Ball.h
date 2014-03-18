@@ -21,15 +21,12 @@ public:
 	void ballDeadReck(sf::Vector2f position, sf::Vector2f velocity, double latency);
 	float getBallVelocity()
 	{ return velocity.y; }
-	inline bool finishedDeadReck()
-	{ return doneFollowingServer; }
 private:
 	sf::Vector2f MakeRandomVector();
 	void CheckBounds();
 	bool CheckCollision();
 	float ballSpeed;
 	bool goingRight;
-	bool doneFollowingServer;
 	sf::Texture pTexture;
 	sf::Sprite pSprite;
 	sf::Vector2f position;
@@ -37,8 +34,6 @@ private:
 	float deadVelocity;
 	sf::Vector2f newPosition;
 	sf::Vector2f destination;
-	sf::Vector2f serverBall;
-	sf::Vector2f deadReckVec;
 };
 
 #endif

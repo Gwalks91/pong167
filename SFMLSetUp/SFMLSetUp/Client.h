@@ -41,6 +41,8 @@ private:
 	sf::Thread* clientThread;
 	std::queue<sf::Packet> clientPacketQueue;
 	sf::Mutex* mutex;
+
+	static const int MAX_PACKETS = 10;
 };
 
 #endif

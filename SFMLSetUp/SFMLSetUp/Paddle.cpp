@@ -5,13 +5,10 @@
 //Testing
 #include <iostream>
 
-const float Paddle::max = .3f;
-
 Paddle::Paddle(bool server, sf::Vector2f v, float speed, sf::Texture t)
 {
 	velocity = sf::Vector2f(0.0f, 0.0f);
 	paddleSpeed = speed;
-	currentSpeed = 0;
 	position = v;
 	pTexture = t;
 	pSprite.setTexture(pTexture);
@@ -20,9 +17,6 @@ Paddle::Paddle(bool server, sf::Vector2f v, float speed, sf::Texture t)
 	buttonHeld = false;
 	serverControl = server;
 	doneFollowingServer = true;
-
-	//Deadreck
-	newPosition = sf::Vector2f (0.0f,0.0f);
 }
 
 Paddle::~Paddle()
