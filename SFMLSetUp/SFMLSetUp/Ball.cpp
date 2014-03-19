@@ -12,7 +12,7 @@ Ball::Ball(float speed, sf::Texture t)
 	pSprite.setPosition(position);
 
 	//deadreck
-	newPosition = sf::Vector2f(0.0f,0.0f);
+	newPosition = sf::Vector2f(position.x, position.y);
 	goingRight = true;
 }
 
@@ -43,8 +43,8 @@ void Ball::ResetBall()
 
 void Ball::Update(float elapsedTime)
 {
-	position += velocity * elapsedTime;
-		
+	position += velocity;
+
 	CheckBounds();
 		
 	if(velocity.x >= 0)
@@ -87,21 +87,9 @@ void Ball::ballDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Position
 	//Normalize.
 	newPosition = sf::Vector2f(newPosition.x/DistanceBetweenVectors(old_Position, position), newPosition.y/DistanceBetweenVectors(old_Position, position));
 
-	if(DistanceBetweenVectors(position, old_Position) >= 10)
-	{
-		position.x = old_Position.x;
-		position.y = old_Position.y;
-	}
+	//Makte sure the ball is as close as possible to the server ball by having a mult that will speed up the ball.
+	DistanceBetweenVectors(position, destination);
 
 	//Set the velocity to catch up with the lag. TO-DO
 	deadVelocity = DistanceBetweenVectors(old_Position, position)/(abs((DistanceBetweenVectors(old_Position, position)/ballSpeed) - latency));
-	velocity = sf::Vector2f(deadReckVelocity.x, deadReckVelocity.y);
-}
-
-//Function that makes a new Vector2f in a random direction that is normalized
-sf::Vector2f Ball::MakeRandomVector()
-{
-	sf::Vector2f newDirection(std::rand(), std::rand());
-	NormalizeVector(newDirection);
-	return newDirection;
 }

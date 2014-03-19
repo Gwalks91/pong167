@@ -41,6 +41,8 @@ private:
 	sf::Mutex* clientMutex;
 	sf::Thread* clientThread;
 	sf::Thread* clientSendThread;
+	int fps;
+	float timePassedTotal;
 };
 
 #endif

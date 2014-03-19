@@ -22,7 +22,6 @@ public:
 	float getBallVelocity()
 	{ return velocity.y; }
 private:
-	sf::Vector2f MakeRandomVector();
 	void CheckBounds();
 	bool CheckCollision();
 	float ballSpeed;
@@ -34,6 +33,7 @@ private:
 	float deadVelocity;
 	sf::Vector2f newPosition;
 	sf::Vector2f destination;
+	int mult;
 };
 
 #endif

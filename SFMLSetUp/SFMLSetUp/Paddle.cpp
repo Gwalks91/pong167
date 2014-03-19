@@ -52,7 +52,7 @@ void Paddle::Update(float elapsedTime)
 	if(!serverControl)
 	{
 		//Set the position.
-		position += velocity * elapsedTime; //original position
+		position += velocity; //original position
 	
 		if(CheckBoundsPosition(position)) 
 		{
@@ -62,7 +62,7 @@ void Paddle::Update(float elapsedTime)
 		else
 		{
 			//Reset the position if the move was invalid.
-			position -= velocity * elapsedTime;
+			position -= velocity;
 			pSprite.setPosition(position);
 		}
 
@@ -86,7 +86,7 @@ void Paddle::Update(float elapsedTime)
 			}
 
 			//Move towards the new position set by the server.
-			position += velocity * elapsedTime;
+			position += velocity;
 			if(DistanceBetweenVectors(position, destination) <= 1 || !CheckBoundsPosition(position))
 			{
 				position = destination;
@@ -137,7 +137,8 @@ bool Paddle::CheckBoundsPosition(sf::Vector2f pos)
 
 std::string Paddle::getPositionAndVelocityString()
 {
-	if(DistanceBetweenVectors(oldPosition, position) >= 1)
+	//If there is a significant change in position then we send an update to the server.
+	if(DistanceBetweenVectors(position, oldPosition) >= 1)
 	{
 		std::stringstream positionAndVelocity;
 		positionAndVelocity << position.x << " " << position.y << " " << velocity.x << " " << velocity.y;

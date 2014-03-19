@@ -14,7 +14,7 @@ Engine::Engine()
 	player1 = new Player(1, sf::Vector2f(10.0f, 0.0f), sf::Keyboard::W, sf::Keyboard::S);
 	player2 = new Player(2, sf::Vector2f(970.0f, 0.0f), sf::Keyboard::Up, sf::Keyboard::Down);
 
-	ball = new Ball(300.0f, LoadTexture("PongBall.png"));
+	ball = new Ball(3.0f, LoadTexture("PongBall.png"));
 
 	backGround = LoadTexture("PokemonStadium.png");
 	backgroundSprite.setTexture(backGround);
@@ -44,6 +44,8 @@ Engine::Engine()
 		clientSendThread = new sf::Thread(&Engine::clientSendThreadUpdate, this);
 		clientSendThread->launch();
 	}
+	timePassedTotal = 0.0f;
+	fps = 0;
 }
 
 Engine::~Engine()
@@ -70,23 +72,24 @@ void Engine::Update()
 {	
 	if(startGame)
 	{	
-		float elapsedTime = deltaClock.getElapsedTime().asSeconds();
-		deltaClock.restart();
-
-		CheckCollision();
-
-		player1->Update(elapsedTime);
-		player2->Update(elapsedTime);
-		
-		ball->Update(elapsedTime);
-
-		s.Update(elapsedTime);
-
-		if(s.winnerIs() != 0)
+		float elapsedTime = deltaClock.getElapsedTime().asMilliseconds();
+		if(elapsedTime >= 16.6)
 		{
-			startGame = false;
+			deltaClock.restart();
+			player1->Update(elapsedTime);
+			player2->Update(elapsedTime);
+		
+			ball->Update(elapsedTime);
+
+			
+			if(s.winnerIs() != 0)
+			{
+				startGame = false;
+			}
 		}
 		HandleInput();
+		CheckCollision();
+		s.Update(elapsedTime);
 	}
 	else
 	{
@@ -147,12 +150,12 @@ void Engine::HandleInput()
 
 void Engine::CheckCollision()
 {
-	if(ball->GetSpriteBoundingBox().intersects(player1->GetPaddle()->GetSpriteBoundingBox()) && ball->GetSpriteBoundingBox().left > player1->GetPaddle()->GetSpriteBoundingBox().left + player1->GetPaddle()->GetSpriteBoundingBox().width - 3 && !ball->GetDirection())
+	if(ball->GetSpriteBoundingBox().intersects(player1->GetPaddle()->GetSpriteBoundingBox()) && !ball->GetDirection())
 	{
 		ball->ChangeBallDirection();
 	}
 		
-	if(ball->GetSpriteBoundingBox().intersects(player2->GetPaddle()->GetSpriteBoundingBox()) && ball->GetSpriteBoundingBox().left + ball->GetSpriteBoundingBox().width < player2->GetPaddle()->GetSpriteBoundingBox().left + 3 && ball->GetDirection())
+	if(ball->GetSpriteBoundingBox().intersects(player2->GetPaddle()->GetSpriteBoundingBox()) && ball->GetDirection())
 	{
 		ball->ChangeBallDirection();
 	}
@@ -226,7 +229,6 @@ void Engine::clientUpdateThread()
 					{
 						player1->setAsServer();
 					}
-					deltaClock.restart();
 					//Start the main update loop and start message sending and recieving.
 				}
 				else if(atoi(subString.c_str()) == 1 || atoi(subString.c_str()) == 2)
@@ -316,13 +318,11 @@ void Engine::clientSendThreadUpdate()
 {
 	while(client->isConnected())
 	{
-		float elapsedTime = sendClock.getElapsedTime().asSeconds();
-		sendClock.restart();
-		timeSinceLastSend += elapsedTime;
+		float elapsedTime = sendClock.getElapsedTime().asMilliseconds();
 		//If we are online we want to send our information to the Server.
-		if(NETWORKED && timeSinceLastSend >= (1/60))
+		if(NETWORKED && elapsedTime >= 16.6)
 		{
-			timeSinceLastSend = 0;
+			sendClock.restart();
 			std::stringstream paddleString;
 			if(clientNumber == 1)
 			{
