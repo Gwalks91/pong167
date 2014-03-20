@@ -49,34 +49,34 @@ void Ball::ResetBall()
 
 void Ball::Update(float elapsedTime)
 {
-	if(doneFollowingServer)
-	{
-		//old Position
-		position += velocity * elapsedTime;
-		pSprite.setPosition(position.x, position.y);
-	}
-	if(!doneFollowingServer)
-	{
-		position +=  newPosition * deadVelocity * elapsedTime;
-		if(DistanceBetweenVectors(position, destination) <= 10)
-		{
-			position = destination;
-			velocity = sf::Vector2f(ballSpeed, ballSpeed);
-			doneFollowingServer = true;
-		}
-		pSprite.setPosition(position.x, position.y);
-	}
+	//if(doneFollowingServer)
+	//{
+	//	//old Position
+	//	position += velocity * elapsedTime;
+	//	pSprite.setPosition(position.x, position.y);
+	//}
+	//if(!doneFollowingServer)
+	//{
+	//	position +=  newPosition * deadVelocity * elapsedTime;
+	//	if(DistanceBetweenVectors(position, destination) <= 10)
+	//	{
+	//		position = destination;
+	//		velocity = sf::Vector2f(ballSpeed, ballSpeed);
+	//		doneFollowingServer = true;
+	//	}
+	//	pSprite.setPosition(position.x, position.y);
+	//}
 
-	CheckBounds();
-	if(velocity.x >= 0)
-		goingRight = true;
-	else
-		goingRight = false;
-	
-	if(position.x < 0 || position.x > SCREEN_WIDTH)
-	{
-		ResetBall();
-	}
+	//CheckBounds();
+	//if(velocity.x >= 0)
+	//	goingRight = true;
+	//else
+	//	goingRight = false;
+	//
+	//if(position.x < 0 || position.x > SCREEN_WIDTH)
+	//{
+	//	ResetBall();
+	//}
 }
 
 void Ball::Draw(sf::RenderWindow* w)
