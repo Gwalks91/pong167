@@ -3,6 +3,7 @@
 
 #include <time.h>
 #include <sstream>
+#include <istream>
 
 Engine::Engine()
 	:s(),
@@ -13,7 +14,7 @@ Engine::Engine()
 	player1 = new Player(1, sf::Vector2f(10.0f, 0.0f), sf::Keyboard::W, sf::Keyboard::S);
 	player2 = new Player(2, sf::Vector2f(970.0f, 0.0f), sf::Keyboard::Up, sf::Keyboard::Down);
 
-	ball = new Ball(300.0f, LoadTexture("PongBall.png"));
+	ball = new Ball(3.0f, LoadTexture("PongBall.png"));
 
 	backGround = LoadTexture("PokemonStadium.png");
 	backgroundSprite.setTexture(backGround);
@@ -21,6 +22,8 @@ Engine::Engine()
 	
 	clientThread = nullptr;
 	clientSendThread = nullptr;
+
+	timeSinceLastSend = 0;
 
 	start = time(0);
 
@@ -32,7 +35,7 @@ Engine::Engine()
 	{
 		//Try to connect to the server.
 		clientMutex = new sf::Mutex;
-		client = new Client("169.234.39.37", 4455);
+		client = new Client("127.0.0.1", 4455);
 		client->setMutex(clientMutex);
 		startGame = false;
 
@@ -41,6 +44,8 @@ Engine::Engine()
 		clientSendThread = new sf::Thread(&Engine::clientSendThreadUpdate, this);
 		clientSendThread->launch();
 	}
+	timePassedTotal = 0.0f;
+	fps = 0;
 }
 
 Engine::~Engine()
@@ -67,23 +72,28 @@ void Engine::Update()
 {	
 	if(startGame)
 	{	
-		float elapsedTime = deltaClock.getElapsedTime().asSeconds();
-		deltaClock.restart();
-
-		CheckCollision();
-
-		player1->Update(elapsedTime);
-		player2->Update(elapsedTime);
-		
-		ball->Update(elapsedTime);
-
-		s.Update(elapsedTime);
-
-		if(s.winnerIs() != 0)
+		float elapsedTime = deltaClock.getElapsedTime().asMilliseconds();
+		if(elapsedTime >= 16.6)
 		{
-			//startGame = false;
+			deltaClock.restart();
+			player1->Update(elapsedTime);
+			player2->Update(elapsedTime);
+		
+			ball->Update(elapsedTime);
+
+			
+			if(s.winnerIs() != 0)
+			{
+				startGame = false;
+			}
 		}
 		HandleInput();
+		CheckCollision();
+		s.Update(elapsedTime);
+	}
+	else
+	{
+		deltaClock.restart();
 	}
 }
 	
@@ -96,20 +106,20 @@ void Engine::Draw()
 	player2->Draw(window);
 	ball->Draw(window);
 	s.Draw(window);
-	//if(s.winnerIs() == 1)
-	//{
-	//	winScreen = LoadTexture("PlayerOneWin.png");
-	//	winScreenSprite.setTexture(winScreen);
-	//	winScreenSprite.setScale(SCREEN_WIDTH/backgroundSprite.getLocalBounds().width , SCREEN_HEIGHT/backgroundSprite.getLocalBounds().height);
-	//	window->draw(winScreenSprite);
-	//}
-	//else if(s.winnerIs() == 2)
-	//{
-	//	winScreen = LoadTexture("PlayerTwoWin.png");
-	//	winScreenSprite.setTexture(winScreen);
-	//	winScreenSprite.setScale(SCREEN_WIDTH/backgroundSprite.getLocalBounds().width , SCREEN_HEIGHT/backgroundSprite.getLocalBounds().height);
-	//	window->draw(winScreenSprite);
-	//}
+	if(s.winnerIs() == 1)
+	{
+		winScreen = LoadTexture("PlayerOneWin.png");
+		winScreenSprite.setTexture(winScreen);
+		winScreenSprite.setScale(SCREEN_WIDTH/backgroundSprite.getLocalBounds().width , SCREEN_HEIGHT/backgroundSprite.getLocalBounds().height);
+		window->draw(winScreenSprite);
+	}
+	else if(s.winnerIs() == 2)
+	{
+		winScreen = LoadTexture("PlayerTwoWin.png");
+		winScreenSprite.setTexture(winScreen);
+		winScreenSprite.setScale(SCREEN_WIDTH/backgroundSprite.getLocalBounds().width , SCREEN_HEIGHT/backgroundSprite.getLocalBounds().height);
+		window->draw(winScreenSprite);
+	}
     window->display();
 }
 
@@ -140,31 +150,33 @@ void Engine::HandleInput()
 
 void Engine::CheckCollision()
 {
-	if(ball->GetSpriteBoundingBox().intersects(player1->GetPaddle()->GetSpriteBoundingBox()) && ball->GetSpriteBoundingBox().left > player1->GetPaddle()->GetSpriteBoundingBox().left + player1->GetPaddle()->GetSpriteBoundingBox().width - 3 && !ball->GetDirection())
+	if(ball->GetSpriteBoundingBox().intersects(player1->GetPaddle()->GetSpriteBoundingBox()) && !ball->GetDirection())
 	{
 		ball->ChangeBallDirection();
 	}
 		
-	if(ball->GetSpriteBoundingBox().intersects(player2->GetPaddle()->GetSpriteBoundingBox()) && ball->GetSpriteBoundingBox().left + ball->GetSpriteBoundingBox().width - 3 < player2->GetPaddle()->GetSpriteBoundingBox().left && ball->GetDirection())
+	if(ball->GetSpriteBoundingBox().intersects(player2->GetPaddle()->GetSpriteBoundingBox()) && ball->GetDirection())
 	{
 		ball->ChangeBallDirection();
 	}
 
-	if(ball->GetSpriteBoundingBox().left <= 3)
+	if(ball->GetSpriteBoundingBox().left <= 3 && !ball->GetDirection())
 	{
 		if(!NETWORKED)
 		{
 			s.ChangeScore(2);
-			ball->ResetBall();
 		}
+
+		ball->ResetBall();
 	}
-	if(ball->GetSpriteBoundingBox().left + ball->GetSpriteBoundingBox().width >= SCREEN_WIDTH && ball->GetSpriteBoundingBox().left + ball->GetSpriteBoundingBox().width < SCREEN_WIDTH + 10)
+	if(ball->GetSpriteBoundingBox().left + ball->GetSpriteBoundingBox().width >= SCREEN_WIDTH && ball->GetSpriteBoundingBox().left + ball->GetSpriteBoundingBox().width < SCREEN_WIDTH + 10 && ball->GetDirection())
 	{
 		if(!NETWORKED)
 		{
 			s.ChangeScore(1);
-			ball->ResetBall();
 		}
+
+		ball->ResetBall();
 	}
 
 }
@@ -217,7 +229,6 @@ void Engine::clientUpdateThread()
 					{
 						player1->setAsServer();
 					}
-
 					//Start the main update loop and start message sending and recieving.
 				}
 				else if(atoi(subString.c_str()) == 1 || atoi(subString.c_str()) == 2)
@@ -255,19 +266,29 @@ void Engine::clientUpdateThread()
 					subString = stringReceived.substr(currentPos, posOfNextSpace);
 					float yVelocity = std::stof(subString.c_str());
 
+					currentPos = posOfNextSpace;
+					posOfNextSpace = stringReceived.find(" ", currentPos + 1);
+					subString = stringReceived.substr(currentPos, posOfNextSpace);
+					std::istringstream stream(subString);
+					time_t serverSentTime;
+					stream >> serverSentTime;
+					
+					std::time_t rawtime;
+					std::time(&rawtime);
+					
 					if(functionToDo == 1)
 					{
-						ball->ballDeadReck(sf::Vector2f(xVelocity, yVelocity), sf::Vector2f(xPosition, yPosition), 0);
+						ball->ballDeadReck(sf::Vector2f(xVelocity, yVelocity), sf::Vector2f(xPosition, yPosition), rawtime - serverSentTime);
 					}
 					else if(functionToDo == 2)
 					{
 						if(clientNumber == 1)
 						{
-							player2->deadReck(sf::Vector2f(xVelocity, yVelocity), sf::Vector2f(xPosition, yPosition), 0);
+							player2->deadReck(sf::Vector2f(xVelocity, yVelocity), sf::Vector2f(xPosition, yPosition), rawtime - serverSentTime);
 						}
 						else if(clientNumber == 2)
 						{
-							player1->deadReck(sf::Vector2f(xVelocity, yVelocity), sf::Vector2f(xPosition, yPosition), 0);
+							player1->deadReck(sf::Vector2f(xVelocity, yVelocity), sf::Vector2f(xPosition, yPosition), rawtime - serverSentTime);
 						}
 					}
 				}
@@ -297,11 +318,11 @@ void Engine::clientSendThreadUpdate()
 {
 	while(client->isConnected())
 	{
-		double secondsSinceStart = difftime( time(0), start);
+		float elapsedTime = sendClock.getElapsedTime().asMilliseconds();
 		//If we are online we want to send our information to the Server.
-		if(NETWORKED && secondsSinceStart >= 0.0333)
+		if(NETWORKED && elapsedTime >= 16.6)
 		{
-			start = time(0);
+			sendClock.restart();
 			std::stringstream paddleString;
 			if(clientNumber == 1)
 			{

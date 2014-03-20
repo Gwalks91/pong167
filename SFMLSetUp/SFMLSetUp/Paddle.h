@@ -21,6 +21,8 @@ public :
 	inline void setAsServer()
 	{ serverControl = true; }
 	std::string getPositionAndVelocityString();
+	inline bool isOldDeadReckDone()
+	{ return doneFollowingServer; }
 private:
 	bool CheckBounds(Input i);
 	bool CheckBoundsPosition(sf::Vector2f pos);
@@ -30,14 +32,11 @@ private:
 	sf::Texture pTexture;
 	sf::Sprite pSprite;
 	sf::Vector2f position;
+	sf::Vector2f destination;
 	sf::Vector2f oldPosition;
 	sf::Vector2f velocity;
+	float distanceOfDead;
 	float paddleSpeed;
-	float currentSpeed;
-
-	sf::Vector2f newPosition;
-
-	static const float max;
 };
 
 #endif

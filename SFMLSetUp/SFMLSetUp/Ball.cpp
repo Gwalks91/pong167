@@ -12,14 +12,8 @@ Ball::Ball(float speed, sf::Texture t)
 	pSprite.setPosition(position);
 
 	//deadreck
-	newPosition = sf::Vector2f(0.0f,0.0f);
-
+	newPosition = sf::Vector2f(position.x, position.y);
 	goingRight = true;
-
-	if(!NETWORKED)
-	{
-		doneFollowingServer = true;
-	}
 }
 
 Ball::~Ball()
@@ -49,34 +43,16 @@ void Ball::ResetBall()
 
 void Ball::Update(float elapsedTime)
 {
-	//if(doneFollowingServer)
-	//{
-	//	//old Position
-	//	position += velocity * elapsedTime;
-	//	pSprite.setPosition(position.x, position.y);
-	//}
-	//if(!doneFollowingServer)
-	//{
-	//	position +=  newPosition * deadVelocity * elapsedTime;
-	//	if(DistanceBetweenVectors(position, destination) <= 10)
-	//	{
-	//		position = destination;
-	//		velocity = sf::Vector2f(ballSpeed, ballSpeed);
-	//		doneFollowingServer = true;
-	//	}
-	//	pSprite.setPosition(position.x, position.y);
-	//}
+	position += velocity;
 
-	//CheckBounds();
-	//if(velocity.x >= 0)
-	//	goingRight = true;
-	//else
-	//	goingRight = false;
-	//
-	//if(position.x < 0 || position.x > SCREEN_WIDTH)
-	//{
-	//	ResetBall();
-	//}
+	CheckBounds();
+		
+	if(velocity.x >= 0)
+		goingRight = true;
+	else
+		goingRight = false;
+
+	pSprite.setPosition(position.x, position.y);
 }
 
 void Ball::Draw(sf::RenderWindow* w)
@@ -102,22 +78,18 @@ void Ball::CheckBounds()
 
 void Ball::ballDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Position, double latency)
 {
-	////paddle deadreck
-	////Set the location from the server to be the 
-	//destination = old_Position;
-	//newPosition = sf::Vector2f(old_Position.x - position.x, old_Position.y - position.y);
+	//paddle deadreck
+	//Set the location from the server to be the start of the client's copy og ther server's ball. 
+	destination = old_Position;
 
-	////Set the velocity to catch up with the lag. TO-DO
-	//deadVelocity = DistanceBetweenVectors(old_Position, position)/(DistanceBetweenVectors(old_Position, position)/ballSpeed);
-	//doneFollowingServer = false;
-	position = old_Position;
-	pSprite.setPosition(position);
-}
+	//Create the unti verctor that points to the location of the server's ball.
+	newPosition = old_Position - position;
+	//Normalize.
+	newPosition = sf::Vector2f(newPosition.x/DistanceBetweenVectors(old_Position, position), newPosition.y/DistanceBetweenVectors(old_Position, position));
 
-//Function that makes a new Vector2f in a random direction that is normalized
-sf::Vector2f Ball::MakeRandomVector()
-{
-	sf::Vector2f newDirection(std::rand(), std::rand());
-	NormalizeVector(newDirection);
-	return newDirection;
+	//Makte sure the ball is as close as possible to the server ball by having a mult that will speed up the ball.
+	DistanceBetweenVectors(position, destination);
+
+	//Set the velocity to catch up with the lag. TO-DO
+	deadVelocity = DistanceBetweenVectors(old_Position, position)/(abs((DistanceBetweenVectors(old_Position, position)/ballSpeed) - latency));
 }
