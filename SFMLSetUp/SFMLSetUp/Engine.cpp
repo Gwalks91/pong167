@@ -35,7 +35,7 @@ Engine::Engine()
 	{
 		//Try to connect to the server.
 		clientMutex = new sf::Mutex;
-		client = new Client("127.0.0.1", 4455);
+		client = new Client("169.234.16.100	", 4455);
 		client->setMutex(clientMutex);
 		startGame = false;
 
@@ -317,7 +317,6 @@ void Engine::clientSendThreadUpdate()
 {
 	while(client->isConnected() && NETWORKED)
 	{
-		sendClock.restart();
 		std::stringstream paddleString;
 		if(clientNumber == 1)
 		{
