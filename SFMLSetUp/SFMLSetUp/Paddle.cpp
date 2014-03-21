@@ -78,23 +78,23 @@ void Paddle::Update(float elapsedTime)
 			//Slow the paddle down as it gets to the destination.
 			if(position.y > destination.y)
 			{
-				velocity = sf::Vector2f(0, -paddleSpeed*(DistanceBetweenVectors(position, destination)/distanceOfDead));
+				velocity = sf::Vector2f(0, -3.0f);
 			}
 			else
 			{
-				velocity = sf::Vector2f(0, paddleSpeed*(DistanceBetweenVectors(position, destination)/distanceOfDead));
+				velocity = sf::Vector2f(0, 3.0f);
 			}
 
 			//Move towards the new position set by the server.
 			position += velocity;
-			if(DistanceBetweenVectors(position, destination) <= 1 || !CheckBoundsPosition(position))
+			if(DistanceBetweenVectors(position, destination) <= 3 || !CheckBoundsPosition(position))
 			{
 				position = destination;
 				doneFollowingServer = true;
 			}
-			pSprite.setPosition(position);
 		}
 	}
+	pSprite.setPosition(position);
 }
 
 void Paddle::Draw(sf::RenderWindow* w)

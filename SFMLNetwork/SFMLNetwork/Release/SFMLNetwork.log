@@ -1,0 +1,23 @@
+﻿  main.cpp
+c:\users\handerson\documents\visual studio 2010\projects\sfmlnetwork\sfmlnetwork\Server.h(45): warning C4244: 'return' : conversion from 'time_t' to 'long', possible loss of data
+main.cpp(37): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
+main.cpp(37): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
+main.cpp(38): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
+main.cpp(38): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
+main.cpp(39): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
+main.cpp(39): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
+main.cpp(91): warning C4244: 'initializing' : conversion from 'sf::Int32' to 'float', possible loss of data
+main.cpp(92): warning C4244: 'initializing' : conversion from 'sf::Int32' to 'float', possible loss of data
+main.cpp(137): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
+main.cpp(137): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
+main.cpp(158): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
+main.cpp(158): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
+main.cpp(229): warning C4244: '=' : conversion from 'time_t' to 'int', possible loss of data
+main.cpp(235): warning C4244: '=' : conversion from 'time_t' to 'int', possible loss of data
+main.cpp(283): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
+main.cpp(283): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
+main.cpp(293): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
+main.cpp(293): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
+  Generating code
+  Finished generating code
+  SFMLNetwork.vcxproj -> C:\Users\Handerson\Documents\Visual Studio 2010\Projects\SFMLNetwork\SFMLNetwork\Release\SFMLServer.exe

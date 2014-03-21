@@ -76,11 +76,10 @@ void Engine::Update()
 		if(elapsedTime >= 16.6)
 		{
 			deltaClock.restart();
+
+			ball->Update(elapsedTime);
 			player1->Update(elapsedTime);
 			player2->Update(elapsedTime);
-		
-			ball->Update(elapsedTime);
-
 			
 			if(s.winnerIs() != 0)
 			{
@@ -169,7 +168,7 @@ void Engine::CheckCollision()
 
 		ball->ResetBall();
 	}
-	if(ball->GetSpriteBoundingBox().left + ball->GetSpriteBoundingBox().width >= SCREEN_WIDTH && ball->GetSpriteBoundingBox().left + ball->GetSpriteBoundingBox().width < SCREEN_WIDTH + 10 && ball->GetDirection())
+	if(ball->GetSpriteBoundingBox().left + ball->GetSpriteBoundingBox().width >= SCREEN_WIDTH && ball->GetSpriteBoundingBox().left + ball->GetSpriteBoundingBox().width < SCREEN_WIDTH - 3 && ball->GetDirection())
 	{
 		if(!NETWORKED)
 		{
@@ -304,7 +303,7 @@ void Engine::clientUpdateThread()
 					{	
 						s.ChangeScore(1);
 					}
-					else
+					else if(pointEarner == 2)
 					{
 						s.ChangeScore(2);
 					}
@@ -316,35 +315,30 @@ void Engine::clientUpdateThread()
 
 void Engine::clientSendThreadUpdate()
 {
-	while(client->isConnected())
+	while(client->isConnected() && NETWORKED)
 	{
-		float elapsedTime = sendClock.getElapsedTime().asMilliseconds();
-		//If we are online we want to send our information to the Server.
-		if(NETWORKED && elapsedTime >= 16.6)
+		sendClock.restart();
+		std::stringstream paddleString;
+		if(clientNumber == 1)
 		{
-			sendClock.restart();
-			std::stringstream paddleString;
-			if(clientNumber == 1)
+			std::time_t rawtime;
+			std::time(&rawtime);
+			std::string padPosVel = player1->GetPaddle()->getPositionAndVelocityString();
+			if(padPosVel != "")
 			{
-				std::time_t rawtime;
-				std::time(&rawtime);
-				std::string padPosVel = player1->GetPaddle()->getPositionAndVelocityString();
-				if(padPosVel != "")
-				{
-					paddleString << "2 " << clientNumber << " " << padPosVel << " " << rawtime;
-					client->send(paddleString.str());
-				}
+				paddleString << "2 " << clientNumber << " " << padPosVel << " " << rawtime;
+				client->send(paddleString.str());
 			}
-			else if(clientNumber == 2)
+		}
+		else if(clientNumber == 2)
+		{
+			std::time_t rawtime;
+			std::time(&rawtime);
+			std::string padPosVel = player2->GetPaddle()->getPositionAndVelocityString();
+			if(padPosVel != "")
 			{
-				std::time_t rawtime;
-				std::time(&rawtime);
-				std::string padPosVel = player2->GetPaddle()->getPositionAndVelocityString();
-				if(padPosVel != "")
-				{
-					paddleString << "2 " << clientNumber << " " << padPosVel << " " << rawtime;
-					client->send(paddleString.str());
-				}
+				paddleString << "2 " << clientNumber << " " << padPosVel << " " << rawtime;
+				client->send(paddleString.str());
 			}
 		}
 	}

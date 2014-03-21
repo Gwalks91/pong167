@@ -23,14 +23,14 @@ public:
 	{ return velocity.y; }
 private:
 	void CheckBounds();
-	bool CheckCollision();
 	float ballSpeed;
 	bool goingRight;
+	bool reachLastServerPosition;
 	sf::Texture pTexture;
 	sf::Sprite pSprite;
 	sf::Vector2f position;
 	sf::Vector2f velocity;
-	float deadVelocity;
+	sf::Vector2f deadReckVel;
 	sf::Vector2f newPosition;
 	sf::Vector2f destination;
 	int mult;
