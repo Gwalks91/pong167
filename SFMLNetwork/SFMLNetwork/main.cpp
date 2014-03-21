@@ -18,7 +18,7 @@ static const int SCREEN_HEIGHT = 550;
 
 static const int BALL_WIDTH = 20;
 static const int BALL_HEIGHT = 20;
-sf::Vector2f ballVelocity(3.0f, 3.0f);
+sf::Vector2f ballVelocity(1.5f, 1.5f);
 
 static const int PADDLE_WIDTH = 23;
 static const int PADDLE_HEIGHT = 66;
@@ -69,7 +69,7 @@ void checkBounds()
 		ballCollisionDetected = true;
 		ballVelocity.y *= -1.0f;
 	}
-	if(ballRect.top < 100 || ballRect.top + ballRect.height > SCREEN_HEIGHT - 100 || ballRect.left < 100 || ballRect.left + ballRect.width > SCREEN_WIDTH - 100)
+	if(ballRect.top < 10 || ballRect.top + ballRect.height > SCREEN_HEIGHT - 10 || ballRect.left < 10 || ballRect.left + ballRect.width > SCREEN_WIDTH - 10)
 	{
 		ballCollisionDetected = true;
 	}
@@ -159,7 +159,7 @@ void stateUpdate()
 			ballCollisionDetected = true;
 		}
 
-		if(ballCollisionDetected || ballSendTimer >= (1/30))
+		if(ballSendTimer >= (1/20))
 		{
 			ballSendTimer = 0;
 			std::time_t rawtime;
@@ -282,9 +282,10 @@ int main()
 
 						onePaddleRect = sf::FloatRect(xPosition, yPosition, PADDLE_WIDTH, PADDLE_HEIGHT);
 						paddle1Velocity = sf::Vector2f(xVelocity, yVelocity);
+						//std::cout << "Updating player 1 paddle: " << xPosition << ", " << yPosition << std::endl;
 					}
 					//The right paddle.
-					else
+					else if (playerNumber == 2)
 					{
 						std::stringstream serverPaddleString;
 						serverPaddleString << "2 2 " << xPosition << " " << yPosition << " " << xVelocity << " " << yVelocity << " " << (rawtime - playerTwoLag); 
@@ -292,6 +293,7 @@ int main()
 
 						twoPaddleRect = sf::FloatRect(xPosition, yPosition, PADDLE_WIDTH, PADDLE_HEIGHT);
 						paddle2Velocity = sf::Vector2f(xVelocity, yVelocity);
+						//std::cout << "Updating player 2 paddle: " << xPosition << ", " << yPosition << std::endl;
 					}
 				}
 
