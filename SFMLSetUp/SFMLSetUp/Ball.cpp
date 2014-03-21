@@ -49,13 +49,11 @@ void Ball::Update(float elapsedTime)
 {
 	if(DistanceBetweenVectors(position, destination) < 1 || reachLastServerPosition)
 	{
-		std::cout << "Ball Speed(V): " << velocity.x << " " << velocity.y << " " << std::endl;
 		reachLastServerPosition = true;
 		position += velocity;
 	}
 	else
 	{
-		std::cout << "Ball Speed(NP): " << newPosition.x << " " << newPosition.y << " " << std::endl;
 		position += newPosition;
 	}
 

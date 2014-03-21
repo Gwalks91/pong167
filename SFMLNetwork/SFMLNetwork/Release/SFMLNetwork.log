@@ -1,5 +1,6 @@
-﻿  main.cpp
-c:\users\handerson\documents\visual studio 2010\projects\sfmlnetwork\sfmlnetwork\Server.h(45): warning C4244: 'return' : conversion from 'time_t' to 'long', possible loss of data
+﻿  Client.cpp
+  main.cpp
+c:\users\handerson\documents\pong167\pong167\sfmlnetwork\sfmlnetwork\Server.h(45): warning C4244: 'return' : conversion from 'time_t' to 'long', possible loss of data
 main.cpp(37): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
 main.cpp(37): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
 main.cpp(38): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
@@ -18,6 +19,8 @@ main.cpp(283): warning C4244: 'argument' : conversion from 'const int' to 'float
 main.cpp(283): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
 main.cpp(293): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
 main.cpp(293): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
+  Server.cpp
+c:\users\handerson\documents\pong167\pong167\sfmlnetwork\sfmlnetwork\Server.h(45): warning C4244: 'return' : conversion from 'time_t' to 'long', possible loss of data
   Generating code
   Finished generating code
-  SFMLNetwork.vcxproj -> C:\Users\Handerson\Documents\Visual Studio 2010\Projects\SFMLNetwork\SFMLNetwork\Release\SFMLServer.exe
+  SFMLNetwork.vcxproj -> C:\Users\Handerson\Documents\pong167\pong167\SFMLNetwork\SFMLNetwork\Release\SFMLServer.exe

@@ -138,12 +138,8 @@ bool Paddle::CheckBoundsPosition(sf::Vector2f pos)
 std::string Paddle::getPositionAndVelocityString()
 {
 	//If there is a significant change in position then we send an update to the server.
-	if(DistanceBetweenVectors(position, oldPosition) >= 1)
-	{
-		std::stringstream positionAndVelocity;
-		positionAndVelocity << position.x << " " << position.y << " " << velocity.x << " " << velocity.y;
-		oldPosition = position;
-		return positionAndVelocity.str();
-	}
-	return "";
+	std::stringstream positionAndVelocity;
+	positionAndVelocity << position.x << " " << position.y << " " << velocity.x << " " << velocity.y;
+	oldPosition = position;
+	return positionAndVelocity.str();
 }
