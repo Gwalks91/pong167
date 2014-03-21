@@ -3,16 +3,15 @@
 
 Ball::Ball(float speed, sf::Texture t)
 {
-	std::srand(std::time(NULL));
 	ballSpeed = speed;
 	velocity = sf::Vector2f(ballSpeed, ballSpeed);
 	position = sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 	pTexture = t;
 	pSprite.setTexture(pTexture);
 	pSprite.setPosition(position);
+
 	mult = 0.0f;
 
-	//deadreck
 	newPosition = sf::Vector2f(position.x, position.y);
 	goingRight = true;
 	reachLastServerPosition = true;
@@ -44,25 +43,16 @@ void Ball::ResetBall()
 {
 	position = sf::Vector2f(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 	pSprite.setPosition(position.x, position.y);
+	if(NETWORKED)
+	{
+		velocity = sf::Vector2f(0.0f, 0.0f);
+	}
 }
 
 void Ball::Update(float elapsedTime)
 {
-	if(NETWORKED)
-	{
-		//Create the unti verctor that points to the location of the server's ball.
-		newPosition = destination - position;
-		//Normalize.
-		newPosition = sf::Vector2f(newPosition.x/DistanceBetweenVectors(destination, position), newPosition.y/DistanceBetweenVectors(destination, position))*(ballSpeed);
+	position += velocity;
 
-		//position = lerp(position, destination, mult);
-		position += newPosition;
-	}
-	else
-	{
-		position += velocity;
-	}
-	
 	CheckBounds();
 		
 	if(velocity.x >= 0)
@@ -92,7 +82,6 @@ void Ball::CheckBounds()
 
 void Ball::ballDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Position, double latency)
 {
-	//paddle deadreck
 	//Set the location from the server to be the start of the client's copy of ther server's ball. 
 	destination = old_Position;
 
@@ -103,27 +92,13 @@ void Ball::ballDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Position
 	//Normalize.
 	newPosition = sf::Vector2f(newPosition.x/DistanceBetweenVectors(old_Position, position), newPosition.y/DistanceBetweenVectors(old_Position, position))*(ballSpeed);
 
-	if(DistanceBetweenVectors(destination, position) >= 3)
-	{
-		position = destination;
-	}
-
+	position = old_Position;
 
 	velocity = deadReckVelocity;
 
-	reachLastServerPosition = false;
-
-	currentLatency = latency;
-
-	if(deadDistance >= 1)
-	{
-		mult = (deadDistance/latency)/deadDistance;
-	}
-	else
-	{
-		position = old_Position;
-		mult = 0;
-	}
+	pSprite.setPosition(position.x, position.y);
+	
+	mult = ;
 }
 
 sf::Vector2f Ball::lerp(sf::Vector2f start, sf::Vector2f end, float percent)

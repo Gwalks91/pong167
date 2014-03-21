@@ -31,11 +31,12 @@ private:
 	sf::Sprite pSprite;
 	sf::Vector2f position;
 	sf::Vector2f velocity;
+	sf::Vector2f nextVelocity;
 	sf::Vector2f deadReckVel;
 	sf::Vector2f newPosition;
 	sf::Vector2f destination;
 	float deadDistance;
-	int mult;
+	float mult;
 	float currentLatency;
 };
 
