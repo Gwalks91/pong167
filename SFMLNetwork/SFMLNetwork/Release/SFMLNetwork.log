@@ -1,17 +1,1 @@
-﻿Build started 3/21/2014 1:37:28 AM.
-     1>Project "C:\Users\Grant\Desktop\Game Projects\pong167\SFMLNetwork\SFMLNetwork\SFMLNetwork.vcxproj" on node 2 (build target(s)).
-     1>InitializeBuildStatus:
-         Creating "Release\SFMLServer.unsuccessfulbuild" because "AlwaysCreate" was specified.
-       ClCompile:
-         All outputs are up-to-date.
-       Link:
-         All outputs are up-to-date.
-         SFMLNetwork.vcxproj -> C:\Users\Grant\Desktop\Game Projects\pong167\SFMLNetwork\SFMLNetwork\Release\SFMLServer.exe
-       FinalizeBuildStatus:
-         Deleting file "Release\SFMLServer.unsuccessfulbuild".
-         Touching "Release\SFMLServer.lastbuildstate".
-     1>Done Building Project "C:\Users\Grant\Desktop\Game Projects\pong167\SFMLNetwork\SFMLNetwork\SFMLNetwork.vcxproj" (build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:00.06
+﻿  SFMLNetwork.vcxproj -> C:\Users\Handerson\Documents\pong167\pong167\SFMLNetwork\SFMLNetwork\Release\SFMLServer.exe

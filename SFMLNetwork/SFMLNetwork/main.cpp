@@ -176,7 +176,7 @@ int main()
 {
 	//Create and connect server to port.
 
-	server.connect(4455);
+	server.connect(4444);
 	//Set Mutex.
 	server.setMutex(serverMutex);
 

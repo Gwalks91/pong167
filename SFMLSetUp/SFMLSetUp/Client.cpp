@@ -16,7 +16,7 @@ Client::Client(const std::string& ipAddress, const int& port)
 	
 	connected = true;
 
-	//Create the thread to always be checking for packets.
+	//Create the thread to always be checking for packets.5
 	clientThread = new sf::Thread(&Client::receive, this);
 	clientThread->launch();
 }

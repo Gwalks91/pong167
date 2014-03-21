@@ -35,6 +35,7 @@ private:
 	sf::Vector2f deadReckVel;
 	sf::Vector2f newPosition;
 	sf::Vector2f destination;
+	sf::Vector2f nextDestination;
 	float deadDistance;
 	float mult;
 	float currentLatency;

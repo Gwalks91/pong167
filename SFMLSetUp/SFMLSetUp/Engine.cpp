@@ -35,7 +35,7 @@ Engine::Engine()
 	{
 		//Try to connect to the server.
 		clientMutex = new sf::Mutex;
-		client = new Client("169.234.16.100	", 4455);
+		client = new Client("169.234.16.100", 4444);
 		client->setMutex(clientMutex);
 		startGame = false;
 
