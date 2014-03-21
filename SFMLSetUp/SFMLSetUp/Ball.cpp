@@ -98,7 +98,7 @@ void Ball::ballDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Position
 
 	pSprite.setPosition(position.x, position.y);
 	
-	mult = ;
+	//mult = ;
 }
 
 sf::Vector2f Ball::lerp(sf::Vector2f start, sf::Vector2f end, float percent)
