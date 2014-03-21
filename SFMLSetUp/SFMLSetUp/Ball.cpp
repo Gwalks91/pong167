@@ -10,6 +10,7 @@ Ball::Ball(float speed, sf::Texture t)
 	pTexture = t;
 	pSprite.setTexture(pTexture);
 	pSprite.setPosition(position);
+	mult = 0.0f;
 
 	//deadreck
 	newPosition = sf::Vector2f(position.x, position.y);
@@ -47,16 +48,21 @@ void Ball::ResetBall()
 
 void Ball::Update(float elapsedTime)
 {
-	if(DistanceBetweenVectors(position, destination) < 1 || reachLastServerPosition)
+	if(NETWORKED)
 	{
-		reachLastServerPosition = true;
-		position += velocity;
+		//Create the unti verctor that points to the location of the server's ball.
+		newPosition = destination - position;
+		//Normalize.
+		newPosition = sf::Vector2f(newPosition.x/DistanceBetweenVectors(destination, position), newPosition.y/DistanceBetweenVectors(destination, position))*(ballSpeed);
+
+		//position = lerp(position, destination, mult);
+		position += newPosition;
 	}
 	else
 	{
-		position += newPosition;
+		position += velocity;
 	}
-
+	
 	CheckBounds();
 		
 	if(velocity.x >= 0)
@@ -90,22 +96,37 @@ void Ball::ballDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Position
 	//Set the location from the server to be the start of the client's copy of ther server's ball. 
 	destination = old_Position;
 
-	//Make sure the ball is as close as possible to the server ball by having a mult that will speed up the ball.
-	if(DistanceBetweenVectors(position, destination) >= 1)
-	{
-		mult = ceil(DistanceBetweenVectors(position, destination)/3.0f);
-	}
-	else
-	{
-		mult = 1;
-	}
+	deadDistance = DistanceBetweenVectors(position, destination);
 
 	//Create the unti verctor that points to the location of the server's ball.
 	newPosition = old_Position - position;
 	//Normalize.
-	newPosition = sf::Vector2f(newPosition.x/DistanceBetweenVectors(old_Position, position), newPosition.y/DistanceBetweenVectors(old_Position, position))*(ballSpeed*mult);
+	newPosition = sf::Vector2f(newPosition.x/DistanceBetweenVectors(old_Position, position), newPosition.y/DistanceBetweenVectors(old_Position, position))*(ballSpeed);
+
+	if(DistanceBetweenVectors(destination, position) >= 3)
+	{
+		position = destination;
+	}
+
 
 	velocity = deadReckVelocity;
 
 	reachLastServerPosition = false;
+
+	currentLatency = latency;
+
+	if(deadDistance >= 1)
+	{
+		mult = (deadDistance/latency)/deadDistance;
+	}
+	else
+	{
+		position = old_Position;
+		mult = 0;
+	}
+}
+
+sf::Vector2f Ball::lerp(sf::Vector2f start, sf::Vector2f end, float percent)
+{
+	return (start + percent*(end - start));
 }

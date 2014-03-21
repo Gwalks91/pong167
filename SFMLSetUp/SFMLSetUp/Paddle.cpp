@@ -85,8 +85,15 @@ void Paddle::Update(float elapsedTime)
 				velocity = sf::Vector2f(0, 3.0f);
 			}
 
+			float mult = 1.0f;
+
+			if(DistanceBetweenVectors(position, destination)/distanceOfDead > .5)
+			{
+				mult = 2.0f;
+			}
+
 			//Move towards the new position set by the server.
-			position += velocity;
+			position += velocity * mult;
 			if(DistanceBetweenVectors(position, destination) <= 3 || !CheckBoundsPosition(position))
 			{
 				position = destination;
@@ -120,9 +127,6 @@ void Paddle::paddleDeadReck(sf::Vector2f deadReckVelocity, sf::Vector2f old_Posi
 	
 	distanceOfDead = DistanceBetweenVectors(position, destination);
 
-	//Set the velocity to catch up with the lag. TO-DO
-	velocity = sf::Vector2f(0.0f, DistanceBetweenVectors(destination, position)/(abs((DistanceBetweenVectors(destination, position)/paddleSpeed) - latency)));
-	
 	doneFollowingServer = false;
 }
 
@@ -138,8 +142,15 @@ bool Paddle::CheckBoundsPosition(sf::Vector2f pos)
 std::string Paddle::getPositionAndVelocityString()
 {
 	//If there is a significant change in position then we send an update to the server.
-	std::stringstream positionAndVelocity;
-	positionAndVelocity << position.x << " " << position.y << " " << velocity.x << " " << velocity.y;
-	oldPosition = position;
-	return positionAndVelocity.str();
+	if(abs(position.y - oldPosition.y) >= 3)
+	{
+		std::stringstream positionAndVelocity;
+		positionAndVelocity << position.x << " " << position.y << " " << velocity.x << " " << velocity.y;
+		oldPosition = position;
+		return positionAndVelocity.str();
+	}
+	else
+	{
+		return "";
+	}
 }

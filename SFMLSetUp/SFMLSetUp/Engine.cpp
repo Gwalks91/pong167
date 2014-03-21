@@ -14,7 +14,7 @@ Engine::Engine()
 	player1 = new Player(1, sf::Vector2f(10.0f, 0.0f), sf::Keyboard::W, sf::Keyboard::S);
 	player2 = new Player(2, sf::Vector2f(970.0f, 0.0f), sf::Keyboard::Up, sf::Keyboard::Down);
 
-	ball = new Ball(3.0f, LoadTexture("PongBall.png"));
+	ball = new Ball(1.5f, LoadTexture("PongBall.png"));
 
 	backGround = LoadTexture("PokemonStadium.png");
 	backgroundSprite.setTexture(backGround);
