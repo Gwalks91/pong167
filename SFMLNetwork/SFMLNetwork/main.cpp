@@ -67,21 +67,14 @@ void checkBounds()
 	if((ballVelocity.y > 0 && ballRect.top > SCREEN_HEIGHT - ballRect.height) || (ballVelocity.y < 0 && ballRect.top < 0))
 	{
 		ballCollisionDetected = true;
+		std::cout << "Collided with wall" << std::endl;
 		ballVelocity.y *= -1.0f;
 	}
-	if(ballRect.top < 10 || ballRect.top + ballRect.height > SCREEN_HEIGHT - 10 || ballRect.left < 10 || ballRect.left + ballRect.width > SCREEN_WIDTH - 10)
+	/*if(ballRect.top < 100 || ballRect.top + ballRect.height > SCREEN_HEIGHT - 100 || ballRect.left < 100 || ballRect.left + ballRect.width > SCREEN_WIDTH - 100)
 	{
 		ballCollisionDetected = true;
-	}
-}
-
-bool checkBoundsPosition(sf::Vector2f pos)
-{
-	if((pos.y <= 0) || (pos.y >= SCREEN_HEIGHT - PADDLE_HEIGHT))
-	{
-		return false;
-	}
-	return true;
+		std::cout << "Collided" << std::endl;
+	}*/
 }
 
 void stateUpdate()
@@ -157,9 +150,11 @@ void stateUpdate()
 
 			ballRect = sf::FloatRect(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, BALL_WIDTH, BALL_HEIGHT);
 			ballCollisionDetected = true;
+
+			std::cout << "Collided" << std::endl;
 		}
 
-		if(ballSendTimer >= (1/20))
+		if(ballCollisionDetected || ballSendTimer >= (1/60))
 		{
 			ballSendTimer = 0;
 			std::time_t rawtime;
