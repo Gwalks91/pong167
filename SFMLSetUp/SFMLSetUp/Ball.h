@@ -21,6 +21,7 @@ public:
 	void ballDeadReck(sf::Vector2f position, sf::Vector2f velocity, double latency);
 	float getBallVelocity()
 	{ return velocity.y; }
+	sf::Vector2f lerp(sf::Vector2f start, sf::Vector2f end, float percent);
 private:
 	void CheckBounds();
 	float ballSpeed;
@@ -33,7 +34,9 @@ private:
 	sf::Vector2f deadReckVel;
 	sf::Vector2f newPosition;
 	sf::Vector2f destination;
+	float deadDistance;
 	int mult;
+	float currentLatency;
 };
 
 #endif
